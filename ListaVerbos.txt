@@ -26,7 +26,7 @@ Have	Had	Had	Tener/Haber
 Hear	Heard	Heard	Oír
 Hold	Held	Held	Sujetar
 Keep	Kept	Kept	Guardar
-Know	Knew	Know	Conocer
+Know	Knew	Known	Conocer
 Learn	Learnt	Learnt	Aprender
 Leave	Left	Left	Salir
 Lose	Lost	Lost	Perder
