@@ -41,7 +41,7 @@ Hit	Hit	Hit	Pegar
 Hold	Held	Held	Sujetar
 Hurt	Hurt	Hurt	Lastimar
 Keep	Kept	Kept	Guardar
-Know	Knew	Know	Conocer
+Know	Knew	Known	Conocer
 Lead	Led	Led	Dirigir
 Learn	Learnt	Learnt	Aprender
 Leave	Left	Left	Salir
