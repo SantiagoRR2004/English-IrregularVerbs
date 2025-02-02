@@ -7,6 +7,7 @@ numOfVerbs = 30
 
 html_head = '''
 <hmtl>
+    <meta charset="UTF-8">
 	<head>
 		<style>
 		table, th, td {
