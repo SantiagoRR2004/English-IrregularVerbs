@@ -10,16 +10,25 @@ html_head = """
     <meta charset="UTF-8">
 	<head>
 		<style>
-		table, th, td {
-			border: 1px solid black;
-			border-collapse: collapse;
-		}
-		th, td {
-			padding: 5px;
-		}
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 5px;
+            }
+            .header-line {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+            }
 		</style>
 	</head>
 	<body>
+        <div class="header-line">
+			<span>English</span>
+			<span>08/02/2025</span>
+		</div>
 		<table>
 """
 
