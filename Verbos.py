@@ -1,33 +1,34 @@
 from random import randint
+import datetime
 
 fileInName = "./ListaVerbos.txt"
 fileOutName = "./ExamenVerbos.html"
 
 numOfVerbs = 30
 
-html_head = """
+html_head = f"""
 <hmtl>
     <meta charset="UTF-8">
 	<head>
 		<style>
-            table, th, td {
+            table, th, td {{
                 border: 1px solid black;
                 border-collapse: collapse;
-            }
-            th, td {
+            }}
+            th, td {{
                 padding: 5px;
-            }
-            .header-line {
+            }}
+            .header-line {{
                 display: flex;
                 justify-content: space-between;
                 margin-bottom: 20px;
-            }
+            }}
 		</style>
 	</head>
 	<body>
         <div class="header-line">
 			<span>English</span>
-			<span>08/02/2025</span>
+			<span>{datetime.datetime.now().strftime("%d/%m/%Y")}</span>
 		</div>
 		<table>
 """
