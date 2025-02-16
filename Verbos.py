@@ -23,6 +23,12 @@ html_head = f"""
                 justify-content: space-between;
                 margin-bottom: 20px;
             }}
+            .title {{
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            }}
 		</style>
 	</head>
 	<body>
@@ -30,6 +36,7 @@ html_head = f"""
 			<span>English</span>
 			<span>{datetime.datetime.now().strftime("%d/%m/%Y")}</span>
 		</div>
+        <h1 class="title">IRREGULAR VERB EXAM</h1>
 		<table>
 """
 
