@@ -1,4 +1,5 @@
 import tkinter as tk
+import Verbos
 
 
 class ExamCreator:
@@ -45,11 +46,14 @@ class ExamCreator:
         )  # Places it in the bottom-right with some padding
 
     def save_number(self):
-        global numOfVerbs
+
         try:
             self.numOfVerbs = int(self.spinbox.get())  # Convert input to an integer
-        except ValueError:
-            pass
+            self.window.destroy()
+            Verbos.createExams(numOfVerbs=self.numOfVerbs)
+
+        except Exception as e:
+            print("An error occurred: ", e)
 
 
 if __name__ == "__main__":
