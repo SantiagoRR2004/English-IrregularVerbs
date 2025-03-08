@@ -57,6 +57,11 @@ def createExams(
                 <span>{datetime.datetime.now().strftime("%d/%m/%Y")}</span>
             </div>
             <h1 class="title">IRREGULAR VERB EXAM</h1>
+            <div class="name-surname">
+            <p>Name: _____________</p>
+            <p>Surname: _____________</p>
+        </div>
+
             <table>
     """
 
