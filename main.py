@@ -21,23 +21,23 @@ class ExamCreator:
         self.createWidgets()
 
     def createWidgets(self):
-        self.createLabel()
-        self.createSpinbox()
+        self.createNumberOfVerbs()
         self.createButton()
 
-    def createLabel(self):
+    def createNumberOfVerbs(self) -> None:
+        """
+        Create a spinbox to select the number of verbs for the exam.
+        """
         label = tk.Label(self.window, text="Number of verbs:")
         label.grid(row=0, column=0, padx=5, pady=10, sticky="w")
-
-    def createSpinbox(self):
-        self.spinbox = tk.Spinbox(
+        self.spinboxNVerbs = tk.Spinbox(
             self.window,
             from_=1,
             to=float("inf"),
             width=5,
-            textvariable=tk.StringVar(value=self.numOfVerbs),
+            textvariable=tk.IntVar(value=self.numOfVerbs),
         )
-        self.spinbox.grid(row=0, column=1, padx=5, pady=10, sticky="w")
+        self.spinboxNVerbs.grid(row=0, column=1, padx=5, pady=10, sticky="w")
 
     def createButton(self):
         button = tk.Button(self.window, text="Create exams", command=self.save_number)
@@ -46,9 +46,10 @@ class ExamCreator:
         )  # Places it in the bottom-right with some padding
 
     def save_number(self):
-
         try:
-            self.numOfVerbs = int(self.spinbox.get())  # Convert input to an integer
+            self.numOfVerbs = int(
+                self.spinboxNVerbs.get()
+            )  # Convert input to an integer
             self.window.destroy()
             Verbos.createExams(numOfVerbs=self.numOfVerbs)
 
