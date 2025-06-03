@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, sample, choices
 import datetime
 
 
@@ -78,11 +78,13 @@ def createExams(
 
     columns = lineas[0].split("\t")
 
-    indexes = []
-    while len(indexes) < numOfVerbs:
-        random_verb = randint(1, len(lineas) - 1)
-        if random_verb not in indexes:
-            indexes.append(random_verb)
+    # Fill without repetition
+    indexes = sample(range(1, len(lineas)), min(numOfVerbs, len(lineas) - 1))
+
+    # If more verbs are needed than unique options, allow repeats
+    if len(indexes) < numOfVerbs:
+        remaining = numOfVerbs - len(indexes)
+        indexes += choices(range(1, len(lineas)), k=remaining)
 
     fileOut = open(fileOutName, "w")
 
