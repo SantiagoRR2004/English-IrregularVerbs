@@ -30,7 +30,7 @@ class ExamCreator:
     def createWidgets(self):
         self.createNumberOfVerbs()
         self.createVerbLocation()
-        self.createButton()
+        self.createExamButton()
         self.createResetButton()
 
     def createNumberOfVerbs(self) -> None:
@@ -76,7 +76,7 @@ class ExamCreator:
         self.file_path_var = tk.StringVar(value=self.VERBSFILE)
 
         # Label
-        self.file_label = tk.Label(self.window, text="Fichero con verbos:")
+        self.file_label = tk.Label(self.window, text="Verb file:")
         self.file_label.grid(row=1, column=0, padx=5, pady=10, sticky="w")
 
         # Entry
@@ -91,7 +91,7 @@ class ExamCreator:
         )
         self.file_button.grid(row=1, column=2, padx=5, pady=10, sticky="e")
 
-    def createButton(self):
+    def createExamButton(self):
         button = tk.Button(self.window, text="Create exams", command=self.save_number)
         button.place(
             relx=1.0, rely=1.0, anchor="se", x=-10, y=-10
