@@ -12,23 +12,26 @@ class ExamCreator:
     )
 
     def __init__(self) -> None:
-        self.reset()
+        self.createWindow()
         self.window.mainloop()
 
     def reset(self):
         self.numOfVerbs = self.NUMBEROFVERBS
-        self.createWindow()
+        for widget in self.window.winfo_children():
+            widget.destroy()
+        self.createWidgets()
 
     def createWindow(self):
         self.window = tk.Tk()
         self.window.title("Irregular Verb Exam Creator")
         self.window.geometry("800x600")
-        self.createWidgets()
+        self.reset()
 
     def createWidgets(self):
         self.createNumberOfVerbs()
         self.createVerbLocation()
         self.createButton()
+        self.createResetButton()
 
     def createNumberOfVerbs(self) -> None:
         """
@@ -69,7 +72,6 @@ class ExamCreator:
         Returns:
             - None
         """
-
         # File selection Entry and Button
         self.file_path_var = tk.StringVar(value=self.VERBSFILE)
 
@@ -94,6 +96,12 @@ class ExamCreator:
         button.place(
             relx=1.0, rely=1.0, anchor="se", x=-10, y=-10
         )  # Places it in the bottom-right with some padding
+
+    def createResetButton(self):
+        button = tk.Button(self.window, text="Reset", command=self.reset)
+        button.place(
+            relx=0.0, rely=1.0, anchor="sw", x=10, y=-10
+        )  # Bottom-left with padding
 
     def save_number(self):
         try:
