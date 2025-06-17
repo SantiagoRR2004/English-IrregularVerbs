@@ -1,10 +1,15 @@
 import tkinter as tk
+from tkinter import filedialog
 import Verbos
+import os
 
 
 class ExamCreator:
 
     NUMBEROFVERBS = 30
+    VERBSFILE = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "ListaVerbos.txt"
+    )
 
     def __init__(self) -> None:
         self.reset()
@@ -22,6 +27,7 @@ class ExamCreator:
 
     def createWidgets(self):
         self.createNumberOfVerbs()
+        self.createVerbLocation()
         self.createButton()
 
     def createNumberOfVerbs(self) -> None:
@@ -39,6 +45,50 @@ class ExamCreator:
         )
         self.spinboxNVerbs.grid(row=0, column=1, padx=5, pady=10, sticky="w")
 
+    def browse_file(self) -> None:
+        """
+        Necessary function to get the Browse button working.
+
+        Args:
+            - None
+
+        Returns:
+            - None
+        """
+        file_path = filedialog.askopenfilename(title="Select a file")
+        if file_path:
+            self.file_path_var.set(file_path)
+
+    def createVerbLocation(self) -> None:
+        """
+        Create the file selection entry and button to choose the verbs file.
+
+        Args:
+            - None
+
+        Returns:
+            - None
+        """
+
+        # File selection Entry and Button
+        self.file_path_var = tk.StringVar(value=self.VERBSFILE)
+
+        # Label
+        self.file_label = tk.Label(self.window, text="Fichero con verbos:")
+        self.file_label.grid(row=1, column=0, padx=5, pady=10, sticky="w")
+
+        # Entry
+        self.file_entry = tk.Entry(
+            self.window, textvariable=self.file_path_var, width=40, state="readonly"
+        )
+        self.file_entry.grid(row=1, column=1, padx=5, pady=10, sticky="w")
+
+        # Button
+        self.file_button = tk.Button(
+            self.window, text="Browse...", command=self.browse_file
+        )
+        self.file_button.grid(row=1, column=2, padx=5, pady=10, sticky="e")
+
     def createButton(self):
         button = tk.Button(self.window, text="Create exams", command=self.save_number)
         button.place(
@@ -50,8 +100,10 @@ class ExamCreator:
             self.numOfVerbs = int(
                 self.spinboxNVerbs.get()
             )  # Convert input to an integer
+            Verbos.createExams(
+                numOfVerbs=self.numOfVerbs, fileInName=self.file_path_var.get()
+            )
             self.window.destroy()
-            Verbos.createExams(numOfVerbs=self.numOfVerbs)
 
         except Exception as e:
             print("An error occurred: ", e)
