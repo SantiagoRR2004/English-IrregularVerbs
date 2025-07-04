@@ -1,8 +1,32 @@
 from random import randint, sample, choices
 import datetime
+import os
 
 
 def createExams(
+    fileInName: str = "./ListaVerbos.txt",
+    folderPath: str = "./",
+    numOfVerbs: int = 30,
+    numOfExams: int = 1,
+) -> None:
+    """
+    Create multiple exams with irregular verbs.
+
+    Args:
+        - fileInName (str): The name of the file containing the list of irregular verbs
+        - folderPath (str): The folder where the exams will be saved
+        - numOfVerbs (int): The number of verbs to include in each exam
+        - numOfExams (int): The number of exams to create
+
+    Returns:
+        - None
+    """
+    for i in range(numOfExams):
+        finalPath = os.path.join(folderPath, f"ExamenVerbos{i+1}.html")
+        createExam(fileInName, finalPath, numOfVerbs)
+
+
+def createExam(
     fileInName: str = "./ListaVerbos.txt",
     fileOutName: str = "./ExamenVerbos.html",
     numOfVerbs: int = 30,
@@ -127,4 +151,4 @@ def createExams(
 
 
 if __name__ == "__main__":
-    createExams()
+    createExam()

@@ -10,6 +10,7 @@ class ExamCreator:
     VERBSFILE = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "ListaVerbos.txt"
     )
+    NUMBEROFEXAMS = 1
 
     def __init__(self) -> None:
         self.createWindow()
@@ -17,6 +18,7 @@ class ExamCreator:
 
     def reset(self):
         self.numOfVerbs = self.NUMBEROFVERBS
+        self.numOfExams = self.NUMBEROFEXAMS
         for widget in self.window.winfo_children():
             widget.destroy()
         self.createWidgets()
@@ -30,6 +32,7 @@ class ExamCreator:
     def createWidgets(self):
         self.createNumberOfVerbs()
         self.createVerbLocation()
+        self.createNumberOfExams()
         self.createExamButton()
         self.createResetButton()
 
@@ -91,6 +94,21 @@ class ExamCreator:
         )
         self.file_button.grid(row=1, column=2, padx=5, pady=10, sticky="e")
 
+    def createNumberOfExams(self) -> None:
+        """
+        Create a spinbox to select the number of exams to create.
+        """
+        label = tk.Label(self.window, text="Number of exams:")
+        label.grid(row=2, column=0, padx=5, pady=10, sticky="w")
+        self.spinboxNExams = tk.Spinbox(
+            self.window,
+            from_=1,
+            to=float("inf"),
+            width=5,
+            textvariable=tk.IntVar(value=self.numOfExams),
+        )
+        self.spinboxNExams.grid(row=2, column=1, padx=5, pady=10, sticky="w")
+
     def createExamButton(self):
         button = tk.Button(self.window, text="Create exams", command=self.save_number)
         button.place(
@@ -108,8 +126,11 @@ class ExamCreator:
             self.numOfVerbs = int(
                 self.spinboxNVerbs.get()
             )  # Convert input to an integer
+            self.numOfExams = int(self.spinboxNExams.get())
             Verbos.createExams(
-                numOfVerbs=self.numOfVerbs, fileInName=self.file_path_var.get()
+                numOfVerbs=self.numOfVerbs,
+                fileInName=self.file_path_var.get(),
+                numOfExams=self.numOfExams,
             )
             self.window.destroy()
 
