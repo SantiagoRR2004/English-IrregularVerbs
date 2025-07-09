@@ -95,20 +95,18 @@ class ExamCreator:
         self.file_path_var = tk.StringVar(value=self.VERBSFILE)
 
         # Label
-        self.file_label = tk.Label(self.window, text="Verb file:")
-        self.file_label.grid(row=1, column=0, padx=5, pady=10, sticky="w")
+        fileLabel = tk.Label(self.window, text="Verb file:")
+        fileLabel.grid(row=1, column=0, padx=5, pady=10, sticky="w")
 
         # Entry
-        self.file_entry = tk.Entry(
+        fileEntry = tk.Entry(
             self.window, textvariable=self.file_path_var, width=40, state="readonly"
         )
-        self.file_entry.grid(row=1, column=1, padx=5, pady=10, sticky="w")
+        fileEntry.grid(row=1, column=1, padx=5, pady=10, sticky="w")
 
         # Button
-        self.file_button = tk.Button(
-            self.window, text="Browse...", command=self.browse_file
-        )
-        self.file_button.grid(row=1, column=2, padx=5, pady=10, sticky="e")
+        fileButton = tk.Button(self.window, text="Browse...", command=self.browse_file)
+        fileButton.grid(row=1, column=2, padx=5, pady=10, sticky="e")
 
     def createNumberOfExams(self) -> None:
         """
@@ -140,23 +138,23 @@ class ExamCreator:
         self.exam_folder_path_var = tk.StringVar(value=self.EXAMFOLDER)
 
         # Label
-        self.file_label = tk.Label(self.window, text="Exam Destination:")
-        self.file_label.grid(row=4, column=0, padx=5, pady=10, sticky="w")
+        folderLabel = tk.Label(self.window, text="Exam Destination:")
+        folderLabel.grid(row=4, column=0, padx=5, pady=10, sticky="w")
 
         # Entry
-        self.file_entry = tk.Entry(
+        folderEntry = tk.Entry(
             self.window,
             textvariable=self.exam_folder_path_var,
             width=40,
             state="readonly",
         )
-        self.file_entry.grid(row=4, column=1, padx=5, pady=10, sticky="w")
+        folderEntry.grid(row=4, column=1, padx=5, pady=10, sticky="w")
 
         # Button
-        self.file_button = tk.Button(
+        folderButton = tk.Button(
             self.window, text="Browse...", command=self.browse_folder
         )
-        self.file_button.grid(row=4, column=2, padx=5, pady=10, sticky="e")
+        folderButton.grid(row=4, column=2, padx=5, pady=10, sticky="e")
 
     def createExamButton(self):
         button = tk.Button(self.window, text="Create exams", command=self.save_number)
