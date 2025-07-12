@@ -1,5 +1,6 @@
 from random import randint, sample, choices
 import datetime
+import pandas as pd
 import os
 
 
@@ -8,6 +9,7 @@ def createExams(
     folderPath: str = "./",
     numOfVerbs: int = 30,
     numOfExams: int = 1,
+    studentsFile: str = None,
 ) -> None:
     """
     Create multiple exams with irregular verbs.
@@ -17,17 +19,27 @@ def createExams(
         - folderPath (str): The folder where the exams will be saved
         - numOfVerbs (int): The number of verbs to include in each exam
         - numOfExams (int): The number of exams to create
+        - studentsFile (str): The name of the file containing the list of students
+            This file should have two columns: surname and name.
 
     Returns:
         - None
     """
+    df = pd.read_csv(studentsFile)
 
     width = len(str(numOfExams))
 
-    for i in range(numOfExams):
-        number = f"{i+1:0{width}d}" if numOfExams > 1 else ""
-        finalPath = os.path.join(folderPath, f"ExamenVerbos_{number}.html")
-        createExam(fileInName, finalPath, numOfVerbs)
+    for student in df.itertuples(index=False):
+        fullName = student[1] + " " + student[0]
+
+        for i in range(numOfExams):
+            number = f"{i+1:0{width}d}" if numOfExams > 1 else ""
+            finalPath = os.path.join(
+                folderPath, f"ExamenVerbos_{fullName}_{number}.html"
+            )
+            createExam(
+                fileInName, finalPath, numOfVerbs, name=student[0], surname=student[1]
+            )
 
 
 def createExam(
@@ -52,6 +64,8 @@ def createExam(
         - fileInName (str): The name of the file containing the list of irregular verbs
         - fileOutName (str): The name of the file to save the exam
         - numOfVerbs (int): The number of verbs to include in the exam
+        - name (str): The name of the student
+        - surname (str): The surname of the student
 
     Returns:
         - None
