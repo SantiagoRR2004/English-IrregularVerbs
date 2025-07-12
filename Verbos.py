@@ -34,6 +34,8 @@ def createExam(
     fileInName: str = "./ListaVerbos.txt",
     fileOutName: str = "./ExamenVerbos.html",
     numOfVerbs: int = 30,
+    name: str = "_____________",
+    surname: str = "_____________",
 ) -> None:
     """
     Create an exam with irregular verbs.
@@ -72,10 +74,15 @@ def createExam(
                     margin-bottom: 20px;
                 }}
                 .title {{
-                text-align: center;
-                font-size: 24px;
-                font-weight: bold;
-                margin-bottom: 40px;
+                    text-align: center;
+                    font-size: 24px;
+                    font-weight: bold;
+                    margin-bottom: 40px;
+                }}
+                .name-surname {{
+                    line-height: 0.1; /* Adjusts spacing between lines */
+                    margin-left: 40px; /* Adds indentation */
+                    margin-bottom: 40px; /* Adds space between the surname section and the table */
                 }}
             </style>
         </head>
@@ -86,8 +93,8 @@ def createExam(
             </div>
             <h1 class="title">IRREGULAR VERB EXAM</h1>
             <div class="name-surname">
-            <p>Name: _____________</p>
-            <p>Surname: _____________</p>
+                <p>Name: {name}</p>
+                <p>Surname: {surname}</p>
         </div>
 
             <table>
@@ -114,7 +121,7 @@ def createExam(
         remaining = numOfVerbs - len(indexes)
         indexes += choices(range(1, len(lineas)), k=remaining)
 
-    fileOut = open(fileOutName, "w")
+    fileOut = open(fileOutName, "w", encoding="utf-8")
 
     fileOut.write(html_head)
 
