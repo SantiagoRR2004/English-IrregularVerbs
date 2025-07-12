@@ -21,8 +21,12 @@ def createExams(
     Returns:
         - None
     """
+
+    width = len(str(numOfExams))
+
     for i in range(numOfExams):
-        finalPath = os.path.join(folderPath, f"ExamenVerbos{i+1}.html")
+        number = f"{i+1:0{width}d}" if numOfExams > 1 else ""
+        finalPath = os.path.join(folderPath, f"ExamenVerbos_{number}.html")
         createExam(fileInName, finalPath, numOfVerbs)
 
 
