@@ -178,6 +178,7 @@ class ExamCreator:
                 numOfVerbs=self.numOfVerbs,
                 fileInName=self.file_path_var.get(),
                 numOfExams=self.numOfExams,
+                folderPath=self.exam_folder_path_var.get(),
             )
             self.window.destroy()
 
