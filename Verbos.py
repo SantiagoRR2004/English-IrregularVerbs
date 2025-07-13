@@ -1,7 +1,29 @@
 from random import randint, sample, choices
 import datetime
 import pandas as pd
+import unicodedata
 import os
+
+
+def processString(inputString: str) -> str:
+    """
+    Process a string to normalize it by removing accents and replacing spaces with underscores.
+
+    Args:
+        - inputString (str): The string to process
+
+    Returns:
+        - str: The processed string
+    """
+    # Normalize and remove accents
+    no_accents = "".join(
+        c
+        for c in unicodedata.normalize("NFD", inputString)
+        if unicodedata.category(c) != "Mn"
+    )
+    # Replace spaces with underscores
+    result = no_accents.replace(" ", "_")
+    return result
 
 
 def createExams(
@@ -30,7 +52,7 @@ def createExams(
     width = len(str(numOfExams))
 
     for student in df.itertuples(index=False):
-        fullName = student[1] + " " + student[0]
+        fullName = processString(student[1] + " " + student[0])
 
         for i in range(numOfExams):
             number = f"{i+1:0{width}d}" if numOfExams > 1 else ""
