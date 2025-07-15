@@ -53,33 +53,33 @@ class ExamCreator:
         )
         self.spinboxNVerbs.grid(row=0, column=1, padx=5, pady=10, sticky="w")
 
-    def browse_file(self) -> None:
+    def browse_file(self, fileToSet: tk.StringVar) -> None:
         """
         Necessary function to get the Browse button working.
 
         Args:
-            - None
+            - fileToSet: A StringVar to set the file path.
 
         Returns:
             - None
         """
         file_path = filedialog.askopenfilename(title="Select a file")
         if file_path:
-            self.file_path_var.set(file_path)
+            fileToSet.set(file_path)
 
-    def browse_folder(self) -> None:
+    def browse_folder(self, pathToSet: tk.StringVar) -> None:
         """
         Necessary function to get the Browse button working.
 
         Args:
-            - None
+            - pathToSet: A StringVar to set the folder path.
 
         Returns:
             - None
         """
         folder_path = filedialog.askdirectory(title="Select a folder")
         if folder_path:
-            self.exam_folder_path_var.set(folder_path)
+            pathToSet.set(folder_path)
 
     def createVerbLocation(self) -> None:
         """
@@ -105,7 +105,11 @@ class ExamCreator:
         fileEntry.grid(row=1, column=1, padx=5, pady=10, sticky="w")
 
         # Button
-        fileButton = tk.Button(self.window, text="Browse...", command=self.browse_file)
+        fileButton = tk.Button(
+            self.window,
+            text="Browse...",
+            command=lambda: self.browse_file(self.file_path_var),
+        )
         fileButton.grid(row=1, column=2, padx=5, pady=10, sticky="e")
 
     def createNumberOfExams(self) -> None:
@@ -152,7 +156,9 @@ class ExamCreator:
 
         # Button
         folderButton = tk.Button(
-            self.window, text="Browse...", command=self.browse_folder
+            self.window,
+            text="Browse...",
+            command=lambda: self.browse_folder(self.exam_folder_path_var),
         )
         folderButton.grid(row=4, column=2, padx=5, pady=10, sticky="e")
 
