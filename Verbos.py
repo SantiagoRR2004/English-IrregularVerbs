@@ -47,21 +47,33 @@ def createExams(
     Returns:
         - None
     """
-    df = pd.read_csv(studentsFile)
-
     width = len(str(numOfExams))
 
-    for student in df.itertuples(index=False):
-        fullName = processString(student[1] + " " + student[0])
+    if studentsFile:
+        df = pd.read_csv(studentsFile)
 
+        for student in df.itertuples(index=False):
+            fullName = processString(student[1] + " " + student[0])  # name + surname
+
+            for i in range(numOfExams):
+                number = f"_{i+1:0{width}d}" if numOfExams > 1 else ""
+                finalPath = os.path.join(
+                    folderPath, f"ExamenVerbos_{fullName}{number}.html"
+                )
+                createExam(
+                    fileInName,
+                    finalPath,
+                    numOfVerbs,
+                    name=student[0],
+                    surname=student[1],
+                )
+
+    else:
+        # No students file
         for i in range(numOfExams):
-            number = f"{i+1:0{width}d}" if numOfExams > 1 else ""
-            finalPath = os.path.join(
-                folderPath, f"ExamenVerbos_{fullName}_{number}.html"
-            )
-            createExam(
-                fileInName, finalPath, numOfVerbs, name=student[0], surname=student[1]
-            )
+            number = f"_{i+1:0{width}d}" if numOfExams > 1 else ""
+            finalPath = os.path.join(folderPath, f"ExamenVerbos{number}.html")
+            createExam(fileInName, finalPath, numOfVerbs)
 
 
 def createExam(
@@ -198,4 +210,4 @@ def createExam(
 
 
 if __name__ == "__main__":
-    createExam()
+    createExams()
