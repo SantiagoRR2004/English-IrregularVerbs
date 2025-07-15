@@ -11,7 +11,6 @@ class ExamCreator:
         os.path.dirname(os.path.abspath(__file__)), "ListaVerbos.txt"
     )
     NUMBEROFEXAMS = 1
-    EXAMFOLDER = os.path.dirname(os.path.abspath(__file__))
     HTML = True
     HTMLFOLDER = os.path.dirname(os.path.abspath(__file__))
     PDF = False
@@ -40,7 +39,6 @@ class ExamCreator:
         self.createVerbLocation()
         self.createNumberOfExams()
         self.createExamButton()
-        self.createExamLocation()
         self.createResetButton()
         self.createUseHTMLButton()
         self.createHTMLLocation()
@@ -136,41 +134,6 @@ class ExamCreator:
             textvariable=tk.IntVar(value=self.numOfExams),
         )
         self.spinboxNExams.grid(row=2, column=1, padx=5, pady=10, sticky="w")
-
-    def createExamLocation(self) -> None:
-        """
-        Create the folder selection entry and button to choose where
-        the exams will be created.
-
-        Args:
-            - None
-
-        Returns:
-            - None
-        """
-        # File selection Entry and Button
-        self.exam_folder_path_var = tk.StringVar(value=self.EXAMFOLDER)
-
-        # Label
-        folderLabel = tk.Label(self.window, text="Exam Destination:")
-        folderLabel.grid(row=4, column=0, padx=5, pady=10, sticky="w")
-
-        # Entry
-        folderEntry = tk.Entry(
-            self.window,
-            textvariable=self.exam_folder_path_var,
-            width=40,
-            state="readonly",
-        )
-        folderEntry.grid(row=4, column=1, padx=5, pady=10, sticky="w")
-
-        # Button
-        folderButton = tk.Button(
-            self.window,
-            text="Browse...",
-            command=lambda: self.browse_folder(self.exam_folder_path_var),
-        )
-        folderButton.grid(row=4, column=2, padx=5, pady=10, sticky="e")
 
     def createUseHTMLButton(self) -> None:
         """
@@ -376,7 +339,7 @@ class ExamCreator:
                 numOfVerbs=self.numOfVerbs,
                 fileInName=self.file_path_var.get(),
                 numOfExams=self.numOfExams,
-                folderPath=self.exam_folder_path_var.get(),
+                folderPath=self.html_folder_path_var.get(),
             )
             self.window.destroy()
 
