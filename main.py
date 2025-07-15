@@ -16,6 +16,7 @@ class ExamCreator:
     HTMLFOLDER = os.path.dirname(os.path.abspath(__file__))
     PDF = False
     PDFFOLDER = os.path.dirname(os.path.abspath(__file__))
+    STUDENTSFILE = ""
 
     def __init__(self) -> None:
         self.createWindow()
@@ -45,6 +46,7 @@ class ExamCreator:
         self.createHTMLLocation()
         self.createUsePDFButton()
         self.createPDFLocation()
+        self.createStudentLocation()
 
     def createNumberOfVerbs(self) -> None:
         """
@@ -317,6 +319,40 @@ class ExamCreator:
         else:
             self.pdfFolderButton.config(state="disabled")
             self.pdfFolderEntry.config(textvariable=tk.StringVar(value=""))
+
+    def createStudentLocation(self) -> None:
+        """
+        Create the file selection entry and button to choose the students file.
+
+        Args:
+            - None
+
+        Returns:
+            - None
+        """
+        # File selection Entry and Button
+        self.students_file_path_var = tk.StringVar(value=self.STUDENTSFILE)
+
+        # Label
+        fileLabel = tk.Label(self.window, text="Students file (Optional):")
+        fileLabel.grid(row=10, column=0, padx=5, pady=10, sticky="w")
+
+        # Entry
+        fileEntry = tk.Entry(
+            self.window,
+            textvariable=self.students_file_path_var,
+            width=40,
+            state="readonly",
+        )
+        fileEntry.grid(row=10, column=1, padx=5, pady=10, sticky="w")
+
+        # Button
+        fileButton = tk.Button(
+            self.window,
+            text="Browse...",
+            command=lambda: self.browse_file(self.students_file_path_var),
+        )
+        fileButton.grid(row=10, column=2, padx=5, pady=10, sticky="e")
 
     def createExamButton(self):
         button = tk.Button(self.window, text="Create exams", command=self.save_number)
