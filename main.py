@@ -14,6 +14,7 @@ class ExamCreator:
     EXAMFOLDER = os.path.dirname(os.path.abspath(__file__))
     HTML = True
     HTMLFOLDER = os.path.dirname(os.path.abspath(__file__))
+    PDF = False
 
     def __init__(self) -> None:
         self.createWindow()
@@ -41,6 +42,7 @@ class ExamCreator:
         self.createResetButton()
         self.createUseHTMLButton()
         self.createHTMLLocation()
+        self.createUsePDFButton()
 
     def createNumberOfVerbs(self) -> None:
         """
@@ -239,6 +241,26 @@ class ExamCreator:
         else:
             self.htmlFolderButton.config(state="disabled")
             self.htmlFolderEntry.config(textvariable=tk.StringVar(value=""))
+
+    def createUsePDFButton(self) -> None:
+        """
+        Create a checkbox to select whether to create PDF files or not.
+
+        Args:
+            - None
+
+        Returns:
+            - None
+        """
+        self.pdfVar = tk.BooleanVar(value=self.PDF)
+
+        boolean_checkbox = tk.Checkbutton(
+            self.window,
+            text="Create PDF",
+            command=self.updatePDFLocation,
+            variable=self.pdfVar,
+        )
+        boolean_checkbox.grid(row=7, column=0, padx=5, pady=10, sticky="w")
 
     def createExamButton(self):
         button = tk.Button(self.window, text="Create exams", command=self.save_number)
