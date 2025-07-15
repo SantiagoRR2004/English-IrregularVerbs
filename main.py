@@ -12,6 +12,7 @@ class ExamCreator:
     )
     NUMBEROFEXAMS = 1
     EXAMFOLDER = os.path.dirname(os.path.abspath(__file__))
+    HTML = True
 
     def __init__(self) -> None:
         self.createWindow()
@@ -37,6 +38,7 @@ class ExamCreator:
         self.createExamButton()
         self.createExamLocation()
         self.createResetButton()
+        self.createUseHTMLButton()
 
     def createNumberOfVerbs(self) -> None:
         """
@@ -161,6 +163,26 @@ class ExamCreator:
             command=lambda: self.browse_folder(self.exam_folder_path_var),
         )
         folderButton.grid(row=4, column=2, padx=5, pady=10, sticky="e")
+
+    def createUseHTMLButton(self) -> None:
+        """
+        Create a checkbox to select whether to create HTML files or not.
+
+        Args:
+            - None
+
+        Returns:
+            - None
+        """
+        self.htmlVar = tk.BooleanVar(value=self.HTML)
+
+        boolean_checkbox = tk.Checkbutton(
+            self.window,
+            text="Create HTML",
+            command=self.updateHTMLLocation,
+            variable=self.htmlVar,
+        )
+        boolean_checkbox.grid(row=5, column=0, padx=5, pady=10, sticky="w")
 
     def createExamButton(self):
         button = tk.Button(self.window, text="Create exams", command=self.save_number)
