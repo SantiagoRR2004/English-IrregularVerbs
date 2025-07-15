@@ -15,6 +15,7 @@ class ExamCreator:
     HTML = True
     HTMLFOLDER = os.path.dirname(os.path.abspath(__file__))
     PDF = False
+    PDFFOLDER = os.path.dirname(os.path.abspath(__file__))
 
     def __init__(self) -> None:
         self.createWindow()
@@ -43,6 +44,7 @@ class ExamCreator:
         self.createUseHTMLButton()
         self.createHTMLLocation()
         self.createUsePDFButton()
+        self.createPDFLocation()
 
     def createNumberOfVerbs(self) -> None:
         """
@@ -261,6 +263,60 @@ class ExamCreator:
             variable=self.pdfVar,
         )
         boolean_checkbox.grid(row=7, column=0, padx=5, pady=10, sticky="w")
+
+    def createPDFLocation(self) -> None:
+        """
+        Create the folder selection entry and button to choose where
+        the pdf exams will be created.
+
+        Args:
+            - None
+
+        Returns:
+            - None
+        """
+        # File selection Entry and Button
+        self.pdf_folder_path_var = tk.StringVar(value=self.PDFFOLDER)
+
+        # Label
+        folderLabel = tk.Label(self.window, text="PDF Destination:")
+        folderLabel.grid(row=8, column=0, padx=5, pady=10, sticky="w")
+
+        # Entry
+        self.pdfFolderEntry = tk.Entry(
+            self.window,
+            textvariable=self.pdf_folder_path_var,
+            width=40,
+            state="readonly",
+        )
+        self.pdfFolderEntry.grid(row=8, column=1, padx=5, pady=10, sticky="w")
+
+        # Button
+        self.pdfFolderButton = tk.Button(
+            self.window,
+            text="Browse...",
+            command=lambda: self.browse_folder(self.pdf_folder_path_var),
+        )
+        self.pdfFolderButton.grid(row=8, column=2, padx=5, pady=10, sticky="e")
+
+        self.updatePDFLocation()
+
+    def updatePDFLocation(self) -> None:
+        """
+        Update the state of the PDF folder entry and button based on the checkbox.
+
+        Args:
+            - None
+
+        Returns:
+            - None
+        """
+        if self.pdfVar.get():
+            self.pdfFolderButton.config(state="normal")
+            self.pdfFolderEntry.config(textvariable=self.pdf_folder_path_var)
+        else:
+            self.pdfFolderButton.config(state="disabled")
+            self.pdfFolderEntry.config(textvariable=tk.StringVar(value=""))
 
     def createExamButton(self):
         button = tk.Button(self.window, text="Create exams", command=self.save_number)
