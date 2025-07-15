@@ -13,6 +13,7 @@ class ExamCreator:
     NUMBEROFEXAMS = 1
     EXAMFOLDER = os.path.dirname(os.path.abspath(__file__))
     HTML = True
+    HTMLFOLDER = os.path.dirname(os.path.abspath(__file__))
 
     def __init__(self) -> None:
         self.createWindow()
@@ -39,6 +40,7 @@ class ExamCreator:
         self.createExamLocation()
         self.createResetButton()
         self.createUseHTMLButton()
+        self.createHTMLLocation()
 
     def createNumberOfVerbs(self) -> None:
         """
@@ -183,6 +185,60 @@ class ExamCreator:
             variable=self.htmlVar,
         )
         boolean_checkbox.grid(row=5, column=0, padx=5, pady=10, sticky="w")
+
+    def createHTMLLocation(self) -> None:
+        """
+        Create the folder selection entry and button to choose where
+        the html exams will be created.
+
+        Args:
+            - None
+
+        Returns:
+            - None
+        """
+        # File selection Entry and Button
+        self.html_folder_path_var = tk.StringVar(value=self.HTMLFOLDER)
+
+        # Label
+        folderLabel = tk.Label(self.window, text="HTML Destination:")
+        folderLabel.grid(row=6, column=0, padx=5, pady=10, sticky="w")
+
+        # Entry
+        self.htmlFolderEntry = tk.Entry(
+            self.window,
+            textvariable=self.html_folder_path_var,
+            width=40,
+            state="readonly",
+        )
+        self.htmlFolderEntry.grid(row=6, column=1, padx=5, pady=10, sticky="w")
+
+        # Button
+        self.htmlFolderButton = tk.Button(
+            self.window,
+            text="Browse...",
+            command=lambda: self.browse_folder(self.html_folder_path_var),
+        )
+        self.htmlFolderButton.grid(row=6, column=2, padx=5, pady=10, sticky="e")
+
+        self.updateHTMLLocation()
+
+    def updateHTMLLocation(self) -> None:
+        """
+        Update the state of the HTML folder entry and button based on the checkbox.
+
+        Args:
+            - None
+
+        Returns:
+            - None
+        """
+        if self.htmlVar.get():
+            self.htmlFolderButton.config(state="normal")
+            self.htmlFolderEntry.config(textvariable=self.html_folder_path_var)
+        else:
+            self.htmlFolderButton.config(state="disabled")
+            self.htmlFolderEntry.config(textvariable=tk.StringVar(value=""))
 
     def createExamButton(self):
         button = tk.Button(self.window, text="Create exams", command=self.save_number)
