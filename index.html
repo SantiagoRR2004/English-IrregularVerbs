@@ -1,60 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
+  <head>
     <title>CSV Upload</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <p>Loading default CSV...</p>
     <div id="csv-table-container"></div>
 
-<script type="module">
-    import { parseCSVFile } from './scripts.js';
+    <script type="module">
+      import { parseCSVFile } from "./scripts.js";
 
-    fetch('Verbs/ListaVerbos.txt')
-        .then(response => response.text())
-        .then(csvText => {
-            const csvBlob = new Blob([csvText], { type: 'text/csv' });
-            parseCSVFile(csvBlob, function (data) {
-                console.log("Parsed CSV Data:", data);
+      fetch("Verbs/ListaVerbos.txt")
+        .then((response) => response.text())
+        .then((csvText) => {
+          const csvBlob = new Blob([csvText], { type: "text/csv" });
+          parseCSVFile(csvBlob, function (data) {
+            console.log("Parsed CSV Data:", data);
 
-                // Display data on screen as a table
-                const container = document.getElementById('csv-table-container');
-                container.innerHTML = createTableHTML(data);
-            });
+            // Display data on screen as a table
+            const container = document.getElementById("csv-table-container");
+            container.innerHTML = createTableHTML(data);
+          });
         })
-        .catch(err => {
-            console.error("Failed to load CSV file:", err);
+        .catch((err) => {
+          console.error("Failed to load CSV file:", err);
         });
 
-    // Function to create HTML table from array of objects
-    function createTableHTML(dataArray) {
-        if (!dataArray.length) return '<p>No data to display.</p>';
+      // Function to create HTML table from array of objects
+      function createTableHTML(dataArray) {
+        if (!dataArray.length) return "<p>No data to display.</p>";
 
         // Get table headers from keys of first object
         const headers = Object.keys(dataArray[0]);
 
         // Create table header row
-        let html = '<table border="1" cellspacing="0" cellpadding="5"><thead><tr>';
-        headers.forEach(header => {
-            html += `<th>${header}</th>`;
+        let html =
+          '<table border="1" cellspacing="0" cellpadding="5"><thead><tr>';
+        headers.forEach((header) => {
+          html += `<th>${header}</th>`;
         });
-        html += '</tr></thead><tbody>';
+        html += "</tr></thead><tbody>";
 
         // Create rows for each data object
-        dataArray.forEach(row => {
-            html += '<tr>';
-            headers.forEach(header => {
-                html += `<td>${row[header]}</td>`;
-            });
-            html += '</tr>';
+        dataArray.forEach((row) => {
+          html += "<tr>";
+          headers.forEach((header) => {
+            html += `<td>${row[header]}</td>`;
+          });
+          html += "</tr>";
         });
 
-        html += '</tbody></table>';
+        html += "</tbody></table>";
         return html;
-    }
-</script>
-</body>
-
+      }
+    </script>
+  </body>
 </html>
