@@ -83,13 +83,17 @@ def createExams(
 
             for i in range(numOfExams):
                 number = f"_{i+1:0{width}d}" if numOfExams > 1 else ""
-                finalPath = os.path.join(
+                finalPathHTML = os.path.join(
                     folderHTMLPath, f"ExamenVerbos{fullName}{number}.html"
+                )
+                finalPathPDF = os.path.join(
+                    folderPDFPath, f"ExamenVerbos{fullName}{number}.pdf"
                 )
                 createExam(
                     verbs,
-                    finalPath,
-                    numOfVerbs,
+                    numOfVerbs=numOfVerbs,
+                    finalPathHTML=finalPathHTML,
+                    fileOutNamePDF=finalPathPDF,
                     name=student[0],
                     surname=student[1],
                 )
@@ -98,13 +102,20 @@ def createExams(
         # No students file
         for i in range(numOfExams):
             number = f"_{i+1:0{width}d}" if numOfExams > 1 else ""
-            finalPath = os.path.join(folderHTMLPath, f"ExamenVerbos{number}.html")
-            createExam(verbs, finalPath, numOfVerbs)
+            finalPathHTML = os.path.join(folderHTMLPath, f"ExamenVerbos{number}.html")
+            finalPathPDF = os.path.join(folderPDFPath, f"ExamenVerbos{number}.pdf")
+            createExam(
+                verbs,
+                numOfVerbs=numOfVerbs,
+                fileOutNameHTML=finalPathHTML,
+                fileOutNamePDF=finalPathPDF,
+            )
 
 
 def createExam(
     verbs: pd.DataFrame,
-    fileOutName: str = "./ExamenVerbos.html",
+    fileOutNameHTML: str = "./ExamenVerbos.html",
+    fileOutNamePDF: str = "./ExamenVerbos.pdf",
     numOfVerbs: int = 30,
     name: str = "_____________",
     surname: str = "_____________",
@@ -122,7 +133,8 @@ def createExam(
 
     Args:
         - verbs (pd.DataFrame): The DataFrame containing the irregular verbs
-        - fileOutName (str): The name of the file to save the exam
+        - fileOutNameHTML (str): The name of the html file to save the exam
+        - fileOutNamePDF (str): The name of the pdf file to save the exam
         - numOfVerbs (int): The number of verbs to include in the exam
         - name (str): The name of the student
         - surname (str): The surname of the student
@@ -188,7 +200,7 @@ def createExam(
         remaining = numOfVerbs - len(indexes)
         indexes += choices(range(1, len(verbs)), k=remaining)
 
-    fileOut = open(fileOutName, "w", encoding="utf-8")
+    fileOut = open(fileOutNameHTML, "w", encoding="utf-8")
 
     fileOut.write(html_head)
 
