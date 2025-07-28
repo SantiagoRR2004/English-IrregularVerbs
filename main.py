@@ -6,15 +6,14 @@ import os
 
 class ExamCreator:
 
+    currentDirectory = os.path.dirname(os.path.abspath(__file__))
     NUMBEROFVERBS = 30
-    VERBSFILE = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "ListaVerbos.txt"
-    )
+    VERBSFILE = os.path.join(currentDirectory, "ListaVerbos.txt")
     NUMBEROFEXAMS = 1
     HTML = True
-    HTMLFOLDER = os.path.dirname(os.path.abspath(__file__))
+    HTMLFOLDER = currentDirectory
     PDF = False
-    PDFFOLDER = os.path.dirname(os.path.abspath(__file__))
+    PDFFOLDER = currentDirectory
     STUDENTSFILE = ""
 
     def __init__(self) -> None:
@@ -106,11 +105,20 @@ class ExamCreator:
         fileLabel = tk.Label(self.window, text="Verb file:")
         fileLabel.grid(row=1, column=0, padx=5, pady=10, sticky="w")
 
-        # Entry
-        fileEntry = tk.Entry(
-            self.window, textvariable=self.file_path_var, width=40, state="readonly"
-        )
-        fileEntry.grid(row=1, column=1, padx=5, pady=10, sticky="w")
+        # Get the txt files
+        txtFiles = [
+            f
+            for f in os.listdir(os.path.join(self.currentDirectory, "Verbs"))
+            if f.endswith(".txt")
+        ]
+
+        # Dropdown
+        fileDropdown = tk.OptionMenu(self.window, self.file_path_var, *txtFiles)
+
+        # fileDropdown = tk.Entry(
+        #     self.window, textvariable=self.file_path_var, width=40, state="readonly"
+        # )
+        fileDropdown.grid(row=1, column=1, padx=5, pady=10, sticky="w")
 
         # Button
         fileButton = tk.Button(
@@ -339,7 +347,10 @@ class ExamCreator:
                 numOfVerbs=self.numOfVerbs,
                 fileInName=self.file_path_var.get(),
                 numOfExams=self.numOfExams,
-                folderPath=self.html_folder_path_var.get(),
+                folderHTMLPath=self.html_folder_path_var.get(),
+                saveHTML=self.htmlVar.get(),
+                savePDF=self.pdfVar.get(),
+                studentsFile=self.students_file_path_var.get(),
             )
             self.window.destroy()
 
