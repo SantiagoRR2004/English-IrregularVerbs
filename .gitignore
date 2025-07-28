@@ -1,3 +1,6 @@
 .venv/
 __pycache__
-*.html
+
+# Generated files
+ExamenVerbos*.html
+ExamenVerbos*.pdf
