@@ -28,9 +28,12 @@ def processString(inputString: str) -> str:
 
 def createExams(
     fileInName: str = "./ListaVerbos.txt",
-    folderPath: str = "./",
     numOfVerbs: int = 30,
     numOfExams: int = 1,
+    saveHTML: bool = True,
+    folderHTMLPath: str = "./",
+    savePDF: False = bool,
+    folderPDFPath: str = "./",
     studentsFile: str = None,
 ) -> None:
     """
@@ -38,27 +41,33 @@ def createExams(
 
     Args:
         - fileInName (str): The name of the file containing the list of irregular verbs
-        - folderPath (str): The folder where the exams will be saved
         - numOfVerbs (int): The number of verbs to include in each exam
         - numOfExams (int): The number of exams to create
+        - folderHTMLPath (str): The folder where the html exams will be saved
+        - folderPDFPath (str): The folder where the pdf exams will be saved
         - studentsFile (str): The name of the file containing the list of students
             This file should have two columns: surname and name.
 
     Returns:
         - None
     """
+    if not (saveHTML or savePDF):
+        print("Warning: Nothing will be saved.")
+
     width = len(str(numOfExams))
 
     if studentsFile:
         df = pd.read_csv(studentsFile)
 
         for student in df.itertuples(index=False):
-            fullName = processString(student[1] + " " + student[0])  # name + surname
+            fullName = "_" + processString(
+                student[1] + " " + student[0]
+            )  # name + surname
 
             for i in range(numOfExams):
                 number = f"_{i+1:0{width}d}" if numOfExams > 1 else ""
                 finalPath = os.path.join(
-                    folderPath, f"ExamenVerbos_{fullName}{number}.html"
+                    folderHTMLPath, f"ExamenVerbos{fullName}{number}.html"
                 )
                 createExam(
                     fileInName,
@@ -72,7 +81,7 @@ def createExams(
         # No students file
         for i in range(numOfExams):
             number = f"_{i+1:0{width}d}" if numOfExams > 1 else ""
-            finalPath = os.path.join(folderPath, f"ExamenVerbos{number}.html")
+            finalPath = os.path.join(folderHTMLPath, f"ExamenVerbos{number}.html")
             createExam(fileInName, finalPath, numOfVerbs)
 
 
