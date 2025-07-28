@@ -7,7 +7,7 @@ Build	Built	Built	Construir
 Buy	Bought	Bought	Comprar
 Catch	Caught	Caught	Atrapar
 Choose	Chose	Chosen	Escoger
-Come	Came	Come	Venir	
+Come	Came	Come	Venir
 Cost	Cost	Cost	Costar
 Do	Did	Done	Hacer
 Dream	Dreamt	Dreamt	Soñar
@@ -41,7 +41,7 @@ Run	Ran	Run	Correr
 Say	Said	Said	Decir
 See	Saw	Seen	Ver
 Sell	Sold	Sold	Vender
-Send	Sent	Sent	Enviar	
+Send	Sent	Sent	Enviar
 Sing	Sang	Sung	Cantar
 Sleep	Slept	Slept	Dormir
 Speak	Spoke	Spoken	Hablar

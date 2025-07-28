@@ -12,7 +12,7 @@ Burn	Burnt	Burnt	Quemar
 Buy	Bought	Bought	Comprar
 Catch	Caught	Caught	Atrapar
 Choose	Chose	Chosen	Escoger
-Come	Came	Come	Venir	
+Come	Came	Come	Venir
 Cost	Cost	Cost	Costar
 Cut	Cut	Cut	Cortar
 Do	Did	Done	Hacer
@@ -63,7 +63,7 @@ Run	Ran	Run	Correr
 Say	Said	Said	Decir
 See	Saw	Seen	Ver
 Sell	Sold	Sold	Vender
-Send	Sent	Sent	Enviar	
+Send	Sent	Sent	Enviar
 Shake	Shook	Shaken	Agitar
 Shine	Shone	Shone	Brillar
 Shoot	Shot	Shot	Disparar
