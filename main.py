@@ -8,7 +8,7 @@ class ExamCreator:
 
     currentDirectory = os.path.dirname(os.path.abspath(__file__))
     NUMBEROFVERBS = 30
-    VERBSFILE = os.path.join(currentDirectory, "ListaVerbos.txt")
+    VERBSFOLDER = os.path.join(currentDirectory, "Verbs")
     NUMBEROFEXAMS = 1
     HTML = True
     HTMLFOLDER = currentDirectory
@@ -98,26 +98,18 @@ class ExamCreator:
         Returns:
             - None
         """
+        # Get the txt files
+        txtFiles = [f for f in os.listdir(self.VERBSFOLDER) if f.endswith(".txt")]
+
         # File selection Entry and Button
-        self.file_path_var = tk.StringVar(value=self.VERBSFILE)
+        self.file_path_var = tk.StringVar(value=txtFiles[0])
 
         # Label
         fileLabel = tk.Label(self.window, text="Verb file:")
         fileLabel.grid(row=1, column=0, padx=5, pady=10, sticky="w")
 
-        # Get the txt files
-        txtFiles = [
-            f
-            for f in os.listdir(os.path.join(self.currentDirectory, "Verbs"))
-            if f.endswith(".txt")
-        ]
-
         # Dropdown
         fileDropdown = tk.OptionMenu(self.window, self.file_path_var, *txtFiles)
-
-        # fileDropdown = tk.Entry(
-        #     self.window, textvariable=self.file_path_var, width=40, state="readonly"
-        # )
         fileDropdown.grid(row=1, column=1, padx=5, pady=10, sticky="w")
 
         # Button
@@ -343,9 +335,16 @@ class ExamCreator:
                 self.spinboxNVerbs.get()
             )  # Convert input to an integer
             self.numOfExams = int(self.spinboxNExams.get())
+
+            verbFile = self.file_path_var.get()
+
+            # One of the dropdown options
+            if not os.path.exists(verbFile):
+                verbFile = os.path.join(self.VERBSFOLDER, verbFile)
+
             Verbos.createExams(
                 numOfVerbs=self.numOfVerbs,
-                fileInName=self.file_path_var.get(),
+                fileInName=verbFile,
                 numOfExams=self.numOfExams,
                 folderHTMLPath=self.html_folder_path_var.get(),
                 saveHTML=self.htmlVar.get(),
