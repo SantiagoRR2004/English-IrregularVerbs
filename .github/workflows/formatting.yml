@@ -40,7 +40,7 @@ jobs:
 
       - name: Format all files with Prettier
         run: |
-          prettier --write "**/*"
+          prettier --write "**/*.{js,jsx,ts,tsx,json,json5,jsonc,css,scss,less,html,vue,astro,svelte,md,mdx,yml,yaml,graphql,gql,toml}"
 
       - name: Commit and push changes
         run: |
