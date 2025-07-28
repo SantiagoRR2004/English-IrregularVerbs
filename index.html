@@ -1,59 +1,59 @@
 <!doctype html>
 <html>
   <head>
-    <title>CSV Upload</title>
+    <title>English Irregular Verbs Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
   </head>
 
   <body>
-    <p>Loading default CSV...</p>
-    <div id="csv-table-container"></div>
+    <div class="container">
+      <h1>English Irregular Verbs Game</h1>
+      
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-value" id="total-questions">0</div>
+          <div>Total Questions</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="correct-answers">0</div>
+          <div>Correct Answers</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="percentage">0%</div>
+          <div>Success Rate</div>
+        </div>
+      </div>
+      
+      <div id="loading" class="loading">Loading verbs...</div>
+      
+      <div id="game-area" class="game-area" style="display: none;">
+        <div class="verb-display">
+          <div class="verb-row">
+            <div class="verb-header">Infinitive</div>
+            <div class="verb-header">Past Simple</div>
+            <div class="verb-header">Past Participle</div>
+            <div class="verb-header">Meaning</div>
+          </div>
+          <div class="verb-row" id="verb-row">
+            <!-- Verb data will be inserted here -->
+          </div>
+        </div>
+        
+        <div>
+          <input type="text" id="answer-input" class="answer-input" placeholder="Type your answer here..." />
+        </div>
+        
+        <div class="buttons">
+          <button id="check-btn" class="check-btn">Check Answer</button>
+          <button id="next-btn" class="next-btn">Next Verb</button>
+        </div>
+        
+        <div id="feedback" class="feedback" style="display: none;"></div>
+      </div>
+    </div>
 
-    <script type="module">
-      import { parseCSVFile } from "./scripts.js";
-
-      fetch("Verbs/ListaVerbos.txt")
-        .then((response) => response.text())
-        .then((csvText) => {
-          const csvBlob = new Blob([csvText], { type: "text/csv" });
-          parseCSVFile(csvBlob, function (data) {
-            console.log("Parsed CSV Data:", data);
-
-            // Display data on screen as a table
-            const container = document.getElementById("csv-table-container");
-            container.innerHTML = createTableHTML(data);
-          });
-        })
-        .catch((err) => {
-          console.error("Failed to load CSV file:", err);
-        });
-
-      // Function to create HTML table from array of objects
-      function createTableHTML(dataArray) {
-        if (!dataArray.length) return "<p>No data to display.</p>";
-
-        // Get table headers from keys of first object
-        const headers = Object.keys(dataArray[0]);
-
-        // Create table header row
-        let html =
-          '<table border="1" cellspacing="0" cellpadding="5"><thead><tr>';
-        headers.forEach((header) => {
-          html += `<th>${header}</th>`;
-        });
-        html += "</tr></thead><tbody>";
-
-        // Create rows for each data object
-        dataArray.forEach((row) => {
-          html += "<tr>";
-          headers.forEach((header) => {
-            html += `<td>${row[header]}</td>`;
-          });
-          html += "</tr>";
-        });
-
-        html += "</tbody></table>";
-        return html;
-      }
-    </script>
+    <script type="module" src="scripts.js"></script>
   </body>
 </html>
