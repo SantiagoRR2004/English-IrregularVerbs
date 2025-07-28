@@ -2,15 +2,15 @@
 <html>
   <head>
     <title>English Irregular Verbs Game</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
     <div class="container">
       <h1>English Irregular Verbs Game</h1>
-      
+
       <div class="stats">
         <div class="stat-item">
           <div class="stat-value" id="total-questions">0</div>
@@ -25,10 +25,10 @@
           <div>Success Rate</div>
         </div>
       </div>
-      
+
       <div id="loading" class="loading">Loading verbs...</div>
-      
-      <div id="game-area" class="game-area" style="display: none;">
+
+      <div id="game-area" class="game-area" style="display: none">
         <div class="verb-display">
           <div class="verb-row">
             <div class="verb-header">Infinitive</div>
@@ -40,17 +40,22 @@
             <!-- Verb data will be inserted here -->
           </div>
         </div>
-        
+
         <div>
-          <input type="text" id="answer-input" class="answer-input" placeholder="Type your answer here..." />
+          <input
+            type="text"
+            id="answer-input"
+            class="answer-input"
+            placeholder="Type your answer here..."
+          />
         </div>
-        
+
         <div class="buttons">
           <button id="check-btn" class="check-btn">Check Answer</button>
           <button id="next-btn" class="next-btn">Next Verb</button>
         </div>
-        
-        <div id="feedback" class="feedback" style="display: none;"></div>
+
+        <div id="feedback" class="feedback" style="display: none"></div>
       </div>
     </div>
 
