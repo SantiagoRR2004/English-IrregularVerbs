@@ -26,6 +26,22 @@ def processString(inputString: str) -> str:
     return result
 
 
+def getVerbs(filePath: str) -> pd.DataFrame:
+    """
+    Get the verb data from the file
+
+    Args:
+    - filePath (str): The path to the file containing the list of irregular verbs
+
+    Returns:
+        - pd.DataFrame: DataFrame containing the verbs
+    """
+    df = pd.read_csv(filePath, encoding="utf-8-sig", sep="\t")
+    print("The file contains:", len(df), "verbs")
+
+    return df
+
+
 def createExams(
     fileInName: str = "./ListaVerbos.txt",
     numOfVerbs: int = 30,
@@ -55,6 +71,7 @@ def createExams(
         print("Warning: Nothing will be saved.")
 
     width = len(str(numOfExams))
+    verbs = getVerbs(fileInName)
 
     if studentsFile:
         df = pd.read_csv(studentsFile)
@@ -70,7 +87,7 @@ def createExams(
                     folderHTMLPath, f"ExamenVerbos{fullName}{number}.html"
                 )
                 createExam(
-                    fileInName,
+                    verbs,
                     finalPath,
                     numOfVerbs,
                     name=student[0],
@@ -82,11 +99,11 @@ def createExams(
         for i in range(numOfExams):
             number = f"_{i+1:0{width}d}" if numOfExams > 1 else ""
             finalPath = os.path.join(folderHTMLPath, f"ExamenVerbos{number}.html")
-            createExam(fileInName, finalPath, numOfVerbs)
+            createExam(verbs, finalPath, numOfVerbs)
 
 
 def createExam(
-    fileInName: str = "./ListaVerbos.txt",
+    verbs: pd.DataFrame,
     fileOutName: str = "./ExamenVerbos.html",
     numOfVerbs: int = 30,
     name: str = "_____________",
@@ -104,7 +121,7 @@ def createExam(
     Only one of the columns will contain the word, the other three will be empty.
 
     Args:
-        - fileInName (str): The name of the file containing the list of irregular verbs
+        - verbs (pd.DataFrame): The DataFrame containing the irregular verbs
         - fileOutName (str): The name of the file to save the exam
         - numOfVerbs (int): The number of verbs to include in the exam
         - name (str): The name of the student
@@ -163,20 +180,13 @@ def createExam(
     </hmtl>
     """
 
-    with open(fileInName, encoding="utf-8-sig") as fileIn:
-        content = fileIn.readlines()
-    lineas = [x.strip() for x in content]
-    print("The file contains: " + str(len(lineas) - 1) + " verbs")
-
-    columns = lineas[0].split("\t")
-
     # Fill without repetition
-    indexes = sample(range(1, len(lineas)), min(numOfVerbs, len(lineas) - 1))
+    indexes = sample(range(1, len(verbs)), min(numOfVerbs, len(verbs) - 1))
 
     # If more verbs are needed than unique options, allow repeats
     if len(indexes) < numOfVerbs:
         remaining = numOfVerbs - len(indexes)
-        indexes += choices(range(1, len(lineas)), k=remaining)
+        indexes += choices(range(1, len(verbs)), k=remaining)
 
     fileOut = open(fileOutName, "w", encoding="utf-8")
 
@@ -192,7 +202,7 @@ def createExam(
         <th width="300px"><i>{}</i></th>
     </tr>
     """.format(
-            columns[0], columns[1], columns[2], columns[3]
+            verbs.columns[0], verbs.columns[1], verbs.columns[2], verbs.columns[3]
         )
     )
 
@@ -200,11 +210,11 @@ def createExam(
     for index in indexes:
         fileOut.write("<tr>")
         fileOut.write("<th>{}</th>".format(numQuest))
-        words = lineas[index].split("\t")
+        words = verbs.iloc[index]
         given_word = randint(0, 3)
         for iw in range(4):
             if iw == given_word:
-                fileOut.write('<th width="300px">{}</th>'.format(words[iw]))
+                fileOut.write('<th width="300px">{}</th>'.format(words.iloc[iw]))
             else:
                 fileOut.write('<th width="300px"> </th>')
         fileOut.write("</tr>")
@@ -216,7 +226,3 @@ def createExam(
     fileOut.close()
 
     print("An exam was generated containing " + str(len(indexes)) + " verbs")
-
-
-if __name__ == "__main__":
-    createExams()
