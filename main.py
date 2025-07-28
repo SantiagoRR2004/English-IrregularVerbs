@@ -37,13 +37,13 @@ class ExamCreator:
         self.createNumberOfVerbs()
         self.createVerbLocation()
         self.createNumberOfExams()
-        self.createExamButton()
-        self.createResetButton()
         self.createUseHTMLButton()
         self.createHTMLLocation()
         self.createUsePDFButton()
         self.createPDFLocation()
         self.createStudentLocation()
+        self.createExamButton()
+        self.createResetButton()
 
     def createNumberOfVerbs(self) -> None:
         """
