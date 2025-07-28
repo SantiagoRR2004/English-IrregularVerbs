@@ -2,6 +2,7 @@ from random import randint, sample, choices
 import datetime
 import pandas as pd
 import unicodedata
+import pdfkit
 import os
 
 
@@ -92,7 +93,9 @@ def createExams(
                 createExam(
                     verbs,
                     numOfVerbs=numOfVerbs,
-                    finalPathHTML=finalPathHTML,
+                    fileOutNameHTML=finalPathHTML,
+                    keepHTML=saveHTML,
+                    createPDF=savePDF,
                     fileOutNamePDF=finalPathPDF,
                     name=student[0],
                     surname=student[1],
@@ -108,6 +111,8 @@ def createExams(
                 verbs,
                 numOfVerbs=numOfVerbs,
                 fileOutNameHTML=finalPathHTML,
+                keepHTML=saveHTML,
+                createPDF=savePDF,
                 fileOutNamePDF=finalPathPDF,
             )
 
@@ -115,6 +120,8 @@ def createExams(
 def createExam(
     verbs: pd.DataFrame,
     fileOutNameHTML: str = "./ExamenVerbos.html",
+    keepHTML: bool = True,
+    createPDF: bool = False,
     fileOutNamePDF: str = "./ExamenVerbos.pdf",
     numOfVerbs: int = 30,
     name: str = "_____________",
@@ -134,7 +141,9 @@ def createExam(
     Args:
         - verbs (pd.DataFrame): The DataFrame containing the irregular verbs
         - fileOutNameHTML (str): The name of the html file to save the exam
+        - keepHTML (bool): If false it deletes the html file
         - fileOutNamePDF (str): The name of the pdf file to save the exam
+        - createPDF (bool): Create pdf file from the html one
         - numOfVerbs (int): The number of verbs to include in the exam
         - name (str): The name of the student
         - surname (str): The surname of the student
@@ -236,5 +245,11 @@ def createExam(
     fileOut.write(html_tail)
 
     fileOut.close()
+
+    if createPDF:
+        pdfkit.from_file(fileOutNameHTML, fileOutNamePDF)
+
+    if not keepHTML:
+        os.remove(fileOutNameHTML)
 
     print("An exam was generated containing " + str(len(indexes)) + " verbs")
