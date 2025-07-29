@@ -43,12 +43,20 @@ h1 {
   font-size: clamp(1em, 2vw, 1.2em);
 }
 
-.verb-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: clamp(8px, 2vw, 15px);
+.verb-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(15px, 3vw, 25px);
+  justify-content: center;
   margin: clamp(10px, 2vw, 15px) 0;
+}
+
+.verb-column {
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  flex: 1 1 auto;
+  width: clamp(120px, 25vw, 200px);
 }
 
 .verb-header {

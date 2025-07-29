@@ -9,7 +9,7 @@ let correctAnswers = 0;
 let gameState = "waiting-for-answer"; // 'waiting-for-answer' or 'showing-feedback'
 
 // DOM elements
-let gameArea, verbRow, answerInput, feedback, actionBtn;
+let gameArea, verbGrid, answerInput, feedback, actionBtn;
 let totalQuestionsEl, correctAnswersEl, percentageEl;
 
 // Initialize the game when the page loads
@@ -43,7 +43,7 @@ export function parseCSVFile(file, callback) {
 function initializeGame() {
   // Get DOM elements
   gameArea = document.getElementById("game-area");
-  verbRow = document.getElementById("verb-row");
+  verbGrid = document.getElementById("verb-grid");
   answerInput = document.getElementById("answer-input");
   feedback = document.getElementById("feedback");
   actionBtn = document.getElementById("action-btn");
@@ -140,9 +140,19 @@ function displayVerb() {
     currentVerb.Significado,
   ];
 
-  verbRow.innerHTML = "";
+  verbGrid.innerHTML = "";
 
   for (let i = 0; i < 4; i++) {
+    // Create column container
+    const column = document.createElement("div");
+    column.className = "verb-column";
+
+    // Create header
+    const header = document.createElement("div");
+    header.className = "verb-header";
+    header.textContent = columns[i];
+
+    // Create data cell
     const cell = document.createElement("div");
     cell.className = "verb-cell";
 
@@ -153,7 +163,12 @@ function displayVerb() {
       cell.textContent = values[i];
     }
 
-    verbRow.appendChild(cell);
+    // Add header and cell to column
+    column.appendChild(header);
+    column.appendChild(cell);
+
+    // Add column to grid
+    verbGrid.appendChild(column);
   }
 }
 
