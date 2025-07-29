@@ -53,7 +53,9 @@ function initializeGame() {
 
   // Set up event listeners
   actionBtn.addEventListener("click", handleActionButton);
-  answerInput.addEventListener("keypress", function (e) {
+  
+  // Add document-level Enter key listener so it works even when input is not focused
+  document.addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
       handleActionButton();
     }
@@ -156,7 +158,7 @@ function displayVerb() {
 }
 
 function checkAnswer() {
-  if (!currentVerb || answerInput.value.trim() === "") return;
+  if (!currentVerb) return;
 
   const userAnswer = answerInput.value.trim().toLowerCase();
   const correctAnswer = getCorrectAnswer().toLowerCase();
