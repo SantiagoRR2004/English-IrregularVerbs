@@ -237,11 +237,11 @@ function showFeedback(isCorrect, correctAnswer) {
   ];
 
   // Update the existing verb grid to show all answers
-  const existingColumns = verbGrid.querySelectorAll('.verb-column');
-  
+  const existingColumns = verbGrid.querySelectorAll(".verb-column");
+
   for (let i = 0; i < 4; i++) {
     if (existingColumns[i]) {
-      const cell = existingColumns[i].querySelector('.verb-cell');
+      const cell = existingColumns[i].querySelector(".verb-cell");
       if (cell) {
         cell.className = "verb-cell"; // Remove hidden-cell class if it exists
         cell.textContent = values[i];
