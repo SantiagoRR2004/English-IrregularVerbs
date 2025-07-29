@@ -53,7 +53,7 @@ function initializeGame() {
 
   // Set up event listeners
   actionBtn.addEventListener("click", handleActionButton);
-  
+
   // Add document-level Enter key listener so it works even when input is not focused
   document.addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
