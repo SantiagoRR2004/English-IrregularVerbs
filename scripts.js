@@ -222,7 +222,7 @@ function showFeedback(isCorrect, correctAnswer) {
     feedback.textContent = `Incorrect. The correct answer is: "${correctAnswer}"`;
   }
 
-  // Show the complete verb
+  // Show the complete verb by updating the existing grid
   const columns = [
     "Infinitive",
     "Past Simple",
@@ -236,13 +236,17 @@ function showFeedback(isCorrect, correctAnswer) {
     currentVerb.Significado,
   ];
 
-  verbRow.innerHTML = "";
-
+  // Update the existing verb grid to show all answers
+  const existingColumns = verbGrid.querySelectorAll('.verb-column');
+  
   for (let i = 0; i < 4; i++) {
-    const cell = document.createElement("div");
-    cell.className = "verb-cell";
-    cell.textContent = values[i];
-    verbRow.appendChild(cell);
+    if (existingColumns[i]) {
+      const cell = existingColumns[i].querySelector('.verb-cell');
+      if (cell) {
+        cell.className = "verb-cell"; // Remove hidden-cell class if it exists
+        cell.textContent = values[i];
+      }
+    }
   }
 }
 
