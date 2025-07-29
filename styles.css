@@ -1,22 +1,26 @@
 body {
-  padding: 20px;
+  padding: clamp(10px, 2vw, 20px);
+  margin: 0;
 }
 
 .container {
-  padding: 30px;
+  padding: clamp(15px, 3vw, 30px);
+  margin: 0 auto;
 }
 
 h1 {
   text-align: center;
-  margin-bottom: 30px;
-  font-size: 2.2em;
+  margin-bottom: clamp(20px, 4vw, 30px);
+  font-size: clamp(1.5em, 4vw, 2.2em);
 }
 
 .stats {
   display: flex;
   justify-content: space-around;
-  padding: 15px;
-  margin-bottom: 30px;
+  padding: clamp(10px, 2vw, 15px);
+  margin-bottom: clamp(20px, 4vw, 30px);
+  flex-wrap: wrap;
+  gap: clamp(5px, 1vw, 10px);
 }
 
 .stat-item {
@@ -25,43 +29,47 @@ h1 {
 }
 
 .stat-value {
-  font-size: 1.8em;
+  font-size: clamp(1.5em, 3vw, 1.8em);
 }
 
 .game-area {
   text-align: center;
-  margin: 30px 0;
+  margin: clamp(20px, 4vw, 30px) 0;
 }
 
 .verb-display {
-  padding: 25px;
-  margin: 20px 0;
-  font-size: 1.2em;
+  padding: clamp(15px, 3vw, 25px);
+  margin: clamp(15px, 3vw, 20px) 0;
+  font-size: clamp(1em, 2vw, 1.2em);
 }
 
 .verb-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 15px;
-  margin: 15px 0;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: clamp(8px, 2vw, 15px);
+  margin: clamp(10px, 2vw, 15px) 0;
   align-items: center;
 }
 
 .verb-header {
   font-weight: bold;
-  padding: 10px;
+  padding: clamp(8px, 1.5vw, 10px);
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 0.9em;
+  font-size: clamp(0.8em, 1.5vw, 0.9em);
+  text-align: center;
 }
 
 .verb-cell {
-  padding: 15px;
+  padding: clamp(10px, 2vw, 15px);
   font-weight: bold;
   min-height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
+  word-break: break-word;
+  text-align: center;
+  font-size: clamp(0.9em, 1.8vw, 1em);
 }
 
 .hidden-cell {
@@ -69,12 +77,14 @@ h1 {
 }
 
 .answer-input {
-  padding: 15px;
-  font-size: 1.1em;
+  padding: clamp(10px, 2vw, 15px);
+  font-size: clamp(1em, 2vw, 1.1em);
   border: none;
-  width: 300px;
+  width: 100%;
+  max-width: clamp(250px, 50vw, 300px);
   text-align: center;
-  margin: 20px 0;
+  margin: clamp(15px, 3vw, 20px) 0;
+  box-sizing: border-box;
 }
 
 .answer-input:focus {
@@ -82,16 +92,15 @@ h1 {
 }
 
 .buttons {
-  margin: 20px 0;
+  margin: clamp(15px, 3vw, 20px) 0;
 }
 
 button {
   border: none;
-  padding: 12px 25px;
-  margin: 0 10px;
-  font-size: 1.1em;
+  padding: clamp(10px, 2vw, 12px) clamp(15px, 3vw, 25px);
+  margin: 0 clamp(5px, 1vw, 10px);
+  font-size: clamp(0.9em, 2vw, 1.1em);
   cursor: pointer;
-  transition: background 0.2s;
   text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: bold;
@@ -119,10 +128,11 @@ button:hover {
 }
 
 .feedback {
-  margin: 20px 0;
-  padding: 15px;
+  margin: clamp(15px, 3vw, 20px) 0;
+  padding: clamp(12px, 2vw, 15px);
   font-weight: bold;
-  font-size: 1.1em;
+  font-size: clamp(1em, 2vw, 1.1em);
+  border-radius: 6px;
 }
 
 .correct {
@@ -137,5 +147,5 @@ button:hover {
 
 .loading {
   text-align: center;
-  font-size: 1.2em;
+  font-size: clamp(1em, 2vw, 1.2em);
 }
