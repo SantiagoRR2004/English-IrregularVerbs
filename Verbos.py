@@ -37,14 +37,14 @@ def getVerbs(filePath: str) -> pd.DataFrame:
     Returns:
         - pd.DataFrame: DataFrame containing the verbs
     """
-    df = pd.read_csv(filePath, encoding="utf-8-sig", sep="\t")
+    df = pd.read_csv(filePath, encoding="utf-8-sig", sep=",")
     print("The file contains:", len(df), "verbs")
 
     return df
 
 
 def createExams(
-    fileInName: str = "./ListaVerbos.txt",
+    fileInName: str = "./ListaVerbos.csv",
     numOfVerbs: int = 30,
     numOfExams: int = 1,
     saveHTML: bool = True,

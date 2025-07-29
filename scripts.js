@@ -23,10 +23,10 @@ export function parseCSVFile(file, callback) {
   reader.onload = function (event) {
     const text = event.target.result;
     const lines = text.trim().split("\n");
-    const headers = lines[0].split("\t");
+    const headers = lines[0].split(",");
 
     const data = lines.slice(1).map((line) => {
-      const values = line.split("\t");
+      const values = line.split(",");
       const obj = {};
       headers.forEach((header, index) => {
         obj[header.trim()] = values[index] ? values[index].trim() : "";
@@ -64,7 +64,7 @@ function initializeGame() {
 }
 
 function loadVerbs() {
-  fetch("Verbs/ListaVerbos.txt")
+  fetch("Verbs/ListaVerbos.csv")
     .then((response) => response.text())
     .then((csvText) => {
       const csvBlob = new Blob([csvText], { type: "text/csv" });

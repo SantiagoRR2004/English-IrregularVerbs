@@ -99,7 +99,7 @@ class ExamCreator:
             - None
         """
         # Get the txt files
-        txtFiles = [f for f in os.listdir(self.VERBSFOLDER) if f.endswith(".txt")]
+        txtFiles = [f for f in os.listdir(self.VERBSFOLDER) if f.endswith(".csv")]
 
         # File selection Entry and Button
         self.file_path_var = tk.StringVar(value=txtFiles[0])
