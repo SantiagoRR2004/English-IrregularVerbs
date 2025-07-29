@@ -6,9 +6,10 @@ let currentVerb = null;
 let hiddenColumn = null;
 let totalQuestions = 0;
 let correctAnswers = 0;
+let gameState = 'waiting-for-answer'; // 'waiting-for-answer' or 'showing-feedback'
 
 // DOM elements
-let gameArea, verbRow, answerInput, feedback;
+let gameArea, verbRow, answerInput, feedback, actionBtn;
 let totalQuestionsEl, correctAnswersEl, percentageEl;
 
 // Initialize the game when the page loads
@@ -45,16 +46,16 @@ function initializeGame() {
   verbRow = document.getElementById("verb-row");
   answerInput = document.getElementById("answer-input");
   feedback = document.getElementById("feedback");
+  actionBtn = document.getElementById("action-btn");
   totalQuestionsEl = document.getElementById("total-questions");
   correctAnswersEl = document.getElementById("correct-answers");
   percentageEl = document.getElementById("percentage");
 
   // Set up event listeners
-  document.getElementById("check-btn").addEventListener("click", checkAnswer);
-  document.getElementById("next-btn").addEventListener("click", nextVerb);
+  actionBtn.addEventListener("click", handleActionButton);
   answerInput.addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
-      checkAnswer();
+    handleActionButton();
     }
   });
 
@@ -101,6 +102,11 @@ function nextVerb() {
   // Select random column to hide (0: Infinitive, 1: Past Simple, 2: Past Participle, 3: Meaning)
   hiddenColumn = Math.floor(Math.random() * 4);
 
+  // Reset game state
+  gameState = 'waiting-for-answer';
+  actionBtn.textContent =  'Check Answer';
+  actionBtn.className = 'action-btn check-btn';
+
   // Clear previous state
   answerInput.value = "";
   feedback.style.display = "none";
@@ -108,6 +114,14 @@ function nextVerb() {
 
   // Display the verb with one column hidden
   displayVerb();
+}
+
+function handleActionButton() {
+  if (gameState === 'waiting-for-answer') {
+    checkAnswer();
+  } else if (gameState === 'showing-feedback') {
+    nextVerb();
+  }
 }
 
 function displayVerb() {
@@ -157,6 +171,12 @@ function checkAnswer() {
   }
 
   updateStats();
+  
+  // Change button to "Next Verb"
+  gameState = 'showing-feedback';
+  actionBtn.textContent = 'Next Verb';
+  actionBtn.className = 'action-btn next-btn';
+  answerInput.blur();  // Remove focus from input
 }
 
 function getCorrectAnswer() {
