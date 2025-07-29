@@ -6,7 +6,7 @@ let currentVerb = null;
 let hiddenColumn = null;
 let totalQuestions = 0;
 let correctAnswers = 0;
-let gameState = 'waiting-for-answer'; // 'waiting-for-answer' or 'showing-feedback'
+let gameState = "waiting-for-answer"; // 'waiting-for-answer' or 'showing-feedback'
 
 // DOM elements
 let gameArea, verbRow, answerInput, feedback, actionBtn;
@@ -55,7 +55,7 @@ function initializeGame() {
   actionBtn.addEventListener("click", handleActionButton);
   answerInput.addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
-    handleActionButton();
+      handleActionButton();
     }
   });
 
@@ -103,9 +103,9 @@ function nextVerb() {
   hiddenColumn = Math.floor(Math.random() * 4);
 
   // Reset game state
-  gameState = 'waiting-for-answer';
-  actionBtn.textContent =  'Check Answer';
-  actionBtn.className = 'action-btn check-btn';
+  gameState = "waiting-for-answer";
+  actionBtn.textContent = "Check Answer";
+  actionBtn.className = "action-btn check-btn";
 
   // Clear previous state
   answerInput.value = "";
@@ -117,9 +117,9 @@ function nextVerb() {
 }
 
 function handleActionButton() {
-  if (gameState === 'waiting-for-answer') {
+  if (gameState === "waiting-for-answer") {
     checkAnswer();
-  } else if (gameState === 'showing-feedback') {
+  } else if (gameState === "showing-feedback") {
     nextVerb();
   }
 }
@@ -171,12 +171,12 @@ function checkAnswer() {
   }
 
   updateStats();
-  
+
   // Change button to "Next Verb"
-  gameState = 'showing-feedback';
-  actionBtn.textContent = 'Next Verb';
-  actionBtn.className = 'action-btn next-btn';
-  answerInput.blur();  // Remove focus from input
+  gameState = "showing-feedback";
+  actionBtn.textContent = "Next Verb";
+  actionBtn.className = "action-btn next-btn";
+  answerInput.blur(); // Remove focus from input
 }
 
 function getCorrectAnswer() {
