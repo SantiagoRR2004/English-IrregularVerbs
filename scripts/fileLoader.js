@@ -37,9 +37,7 @@ async function loadFromGitHubPages(currentUrl) {
     repoOwner = urlParts.hostname.split(".")[0];
     repoName = pathParts[0];
   } else {
-    throw new Error(
-      "Unable to parse GitHub Pages URL format: " + currentUrl,
-    );
+    throw new Error("Unable to parse GitHub Pages URL format: " + currentUrl);
   }
 
   if (!repoOwner || !repoName) {

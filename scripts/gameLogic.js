@@ -64,7 +64,7 @@ function nextVerb() {
 
   // Reset game state FIRST
   gameState = "waiting-for-answer";
-  
+
   // Update UI
   updateActionButton("Check Answer", "action-btn check-btn");
   clearGameUI();
@@ -74,7 +74,10 @@ function nextVerb() {
 function checkAnswer() {
   if (!currentVerb) return;
 
-  const userAnswer = document.getElementById("answer-input").value.trim().toLowerCase();
+  const userAnswer = document
+    .getElementById("answer-input")
+    .value.trim()
+    .toLowerCase();
   const correctAnswer = getCorrectAnswer().toLowerCase();
 
   totalQuestions++;
