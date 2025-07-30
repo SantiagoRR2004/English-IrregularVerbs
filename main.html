@@ -29,50 +29,55 @@
       // Load CSV files from Verbs folder
       async function loadVerbFiles() {
         try {
-          const response = await fetch('/Verbs/');
+          const response = await fetch("/Verbs/");
           const text = await response.text();
-          
+
           // Parse directory listing to find CSV files
           const csvFiles = [];
           const parser = new DOMParser();
-          const doc = parser.parseFromString(text, 'text/html');
-          const links = doc.querySelectorAll('a');
-          
-          links.forEach(link => {
-            const href = link.getAttribute('href');
-            if (href && href.endsWith('.csv')) {
+          const doc = parser.parseFromString(text, "text/html");
+          const links = doc.querySelectorAll("a");
+
+          links.forEach((link) => {
+            const href = link.getAttribute("href");
+            if (href && href.endsWith(".csv")) {
               csvFiles.push(href);
             }
           });
-          
+
           // Populate dropdown
-          const select = document.getElementById('verb-file-select');
+          const select = document.getElementById("verb-file-select");
           select.innerHTML = '<option value="">Select a file...</option>';
-          
-          csvFiles.forEach(file => {
-            const option = document.createElement('option');
+
+          csvFiles.forEach((file) => {
+            const option = document.createElement("option");
             option.value = file;
-            option.textContent = file.replace('.csv', '').replace(/([A-Z])/g, ' $1').trim();
+            option.textContent = file
+              .replace(".csv", "")
+              .replace(/([A-Z])/g, " $1")
+              .trim();
             select.appendChild(option);
           });
-          
         } catch (error) {
-          console.error('Error loading files:', error);
+          console.error("Error loading files:", error);
         }
       }
 
       // Load files when page loads
-      document.addEventListener('DOMContentLoaded', loadVerbFiles);
+      document.addEventListener("DOMContentLoaded", loadVerbFiles);
 
-      document.getElementById('start-game-btn').addEventListener('click', function() {
-        const selectedFile = document.getElementById('verb-file-select').value;
-        if (selectedFile) {
-          // Navigate to the game with the selected file as a parameter
-          window.location.href = `index.html?file=${selectedFile}`;
-        } else {
-          alert('Please select a verb file first.');
-        }
-      });
+      document
+        .getElementById("start-game-btn")
+        .addEventListener("click", function () {
+          const selectedFile =
+            document.getElementById("verb-file-select").value;
+          if (selectedFile) {
+            // Navigate to the game with the selected file as a parameter
+            window.location.href = `index.html?file=${selectedFile}`;
+          } else {
+            alert("Please select a verb file first.");
+          }
+        });
     </script>
   </body>
 </html>
