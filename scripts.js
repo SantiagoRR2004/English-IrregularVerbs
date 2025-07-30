@@ -136,6 +136,7 @@ function initializeIndexPage() {
 // Game state
 let verbs = [];
 let currentVerb = null;
+let columnHeaders = []; // Store the CSV column headers dynamically
 let hiddenColumn = null;
 let totalQuestions = 0;
 let correctAnswers = 0;
@@ -163,18 +164,18 @@ function parseCSVFile(file, callback) {
   reader.onload = function (event) {
     const text = event.target.result;
     const lines = text.trim().split("\n");
-    const headers = lines[0].split(",");
+    const headers = lines[0].split(",").map(header => header.trim());
 
     const data = lines.slice(1).map((line) => {
       const values = line.split(",");
       const obj = {};
       headers.forEach((header, index) => {
-        obj[header.trim()] = values[index] ? values[index].trim() : "";
+        obj[header] = values[index] ? values[index].trim() : "";
       });
       return obj;
     });
 
-    callback(data); // Return parsed data
+    callback(data, headers); // Return both parsed data and headers
   };
 
   reader.readAsText(file);
@@ -220,15 +221,17 @@ function loadVerbs() {
     .then((response) => response.text())
     .then((csvText) => {
       const csvBlob = new Blob([csvText], { type: "text/csv" });
-      parseCSVFile(csvBlob, function (data) {
-        verbs = data.filter(
-          (verb) =>
-            verb.Infinitive &&
-            verb["Past Simple"] &&
-            verb["Past participle"] &&
-            verb.Significado,
-        );
+      parseCSVFile(csvBlob, function (data, headers) {
+        // Store the column headers for dynamic usage
+        columnHeaders = headers;
+        
+        // Filter verbs to only include rows with all columns filled
+        verbs = data.filter((verb) => {
+          return columnHeaders.every(header => verb[header] && verb[header].trim() !== "");
+        });
+        
         console.log("Loaded verbs:", verbs);
+        console.log("Column headers:", columnHeaders);
 
         // Hide loading, show game
         document.getElementById("loading").style.display = "none";
@@ -246,13 +249,13 @@ function loadVerbs() {
 }
 
 function nextVerb() {
-  if (verbs.length === 0) return;
+  if (verbs.length === 0 || columnHeaders.length === 0) return;
 
   // Select random verb
   currentVerb = verbs[Math.floor(Math.random() * verbs.length)];
 
-  // Select random column to hide (0: Infinitive, 1: Past Simple, 2: Past Participle, 3: Meaning)
-  hiddenColumn = Math.floor(Math.random() * 4);
+  // Select random column to hide (based on the number of available columns)
+  hiddenColumn = Math.floor(Math.random() * columnHeaders.length);
 
   // Reset game state
   gameState = "waiting-for-answer";
@@ -277,22 +280,9 @@ function handleActionButton() {
 }
 
 function displayVerb() {
-  const columns = [
-    "Infinitive",
-    "Past Simple",
-    "Past participle",
-    "Significado",
-  ];
-  const values = [
-    currentVerb.Infinitive,
-    currentVerb["Past Simple"],
-    currentVerb["Past participle"],
-    currentVerb.Significado,
-  ];
-
   verbGrid.innerHTML = "";
 
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < columnHeaders.length; i++) {
     // Create column container
     const column = document.createElement("div");
     column.className = "verb-column";
@@ -300,7 +290,7 @@ function displayVerb() {
     // Create header
     const header = document.createElement("div");
     header.className = "verb-header";
-    header.textContent = columns[i];
+    header.textContent = columnHeaders[i];
 
     // Create data cell
     const cell = document.createElement("div");
@@ -310,9 +300,11 @@ function displayVerb() {
       cell.className += " hidden-cell";
       cell.textContent = "???";
     } else {
+      // Get the value for this column
+      const value = currentVerb[columnHeaders[i]];
       // Capitalize the first letter of the verb value
-      const capitalizedValue = values[i]
-        ? values[i].charAt(0).toUpperCase() + values[i].slice(1)
+      const capitalizedValue = value
+        ? value.charAt(0).toUpperCase() + value.slice(1)
         : "";
       cell.textContent = capitalizedValue;
     }
@@ -351,18 +343,10 @@ function checkAnswer() {
 }
 
 function getCorrectAnswer() {
-  switch (hiddenColumn) {
-    case 0:
-      return currentVerb.Infinitive;
-    case 1:
-      return currentVerb["Past Simple"];
-    case 2:
-      return currentVerb["Past participle"];
-    case 3:
-      return currentVerb.Significado;
-    default:
-      return "";
+  if (hiddenColumn >= 0 && hiddenColumn < columnHeaders.length) {
+    return currentVerb[columnHeaders[hiddenColumn]];
   }
+  return "";
 }
 
 function showFeedback(isCorrect, correctAnswer) {
@@ -380,30 +364,19 @@ function showFeedback(isCorrect, correctAnswer) {
   }
 
   // Show the complete verb by updating the existing grid
-  const columns = [
-    "Infinitive",
-    "Past Simple",
-    "Past participle",
-    "Significado",
-  ];
-  const values = [
-    currentVerb.Infinitive,
-    currentVerb["Past Simple"],
-    currentVerb["Past participle"],
-    currentVerb.Significado,
-  ];
-
   // Update the existing verb grid to show all answers
   const existingColumns = verbGrid.querySelectorAll(".verb-column");
 
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < columnHeaders.length; i++) {
     if (existingColumns[i]) {
       const cell = existingColumns[i].querySelector(".verb-cell");
       if (cell) {
         cell.className = "verb-cell"; // Remove hidden-cell class if it exists
+        // Get the value for this column
+        const value = currentVerb[columnHeaders[i]];
         // Capitalize the first letter of the verb value
-        const capitalizedValue = values[i]
-          ? values[i].charAt(0).toUpperCase() + values[i].slice(1)
+        const capitalizedValue = value
+          ? value.charAt(0).toUpperCase() + value.slice(1)
           : "";
         cell.textContent = capitalizedValue;
       }
