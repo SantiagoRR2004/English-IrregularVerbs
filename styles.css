@@ -9,26 +9,25 @@ body {
   position: relative;
 }
 
-.back-btn {
-  position: absolute;
-  top: 0;
-  left: 0;
+.small-btn {
   padding: clamp(5px, 1.5vw, 8px);
+  margin: clamp(10px, 2vw, 20px);
   font-size: clamp(0.7em, 1.5vw, 0.8em);
   cursor: pointer;
   text-transform: uppercase;
   z-index: 10;
 }
 
+.back-btn {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
 .main-btn {
   position: fixed;
-  bottom: 20px;
-  left: 20px;
-  padding: clamp(5px, 1.5vw, 8px);
-  font-size: clamp(0.7em, 1.5vw, 0.8em);
-  cursor: pointer;
-  text-transform: uppercase;
-  z-index: 10;
+  bottom: 0;
+  left: 0;
 }
 
 h1 {
@@ -148,14 +147,6 @@ button:hover {
 .check-btn:hover {
   background: #28a745;
   color: white;
-}
-
-.next-btn {
-  background: None;
-}
-
-.next-btn:hover {
-  background: #f8f9fa;
 }
 
 .feedback {

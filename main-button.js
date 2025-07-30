@@ -7,13 +7,13 @@ function createMainButton() {
 
   const mainButton = document.createElement("button");
   mainButton.id = "main-btn";
-  mainButton.className = "main-btn";
+  mainButton.className = "main-btn small-btn";
   mainButton.textContent = "MAIN";
 
   mainButton.onclick = function () {
     const currentUrl = window.location.href;
     if (currentUrl.includes("github.io")) {
-      window.open(window.location.origin, "_blank");
+      window.location.href = window.location.origin;
     }
   };
 
