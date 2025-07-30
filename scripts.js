@@ -164,7 +164,7 @@ function parseCSVFile(file, callback) {
   reader.onload = function (event) {
     const text = event.target.result;
     const lines = text.trim().split("\n");
-    const headers = lines[0].split(",").map(header => header.trim());
+    const headers = lines[0].split(",").map((header) => header.trim());
 
     const data = lines.slice(1).map((line) => {
       const values = line.split(",");
@@ -224,12 +224,14 @@ function loadVerbs() {
       parseCSVFile(csvBlob, function (data, headers) {
         // Store the column headers for dynamic usage
         columnHeaders = headers;
-        
+
         // Filter verbs to only include rows with all columns filled
         verbs = data.filter((verb) => {
-          return columnHeaders.every(header => verb[header] && verb[header].trim() !== "");
+          return columnHeaders.every(
+            (header) => verb[header] && verb[header].trim() !== "",
+          );
         });
-        
+
         console.log("Loaded verbs:", verbs);
         console.log("Column headers:", columnHeaders);
 
