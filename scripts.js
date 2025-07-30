@@ -122,8 +122,10 @@ function initializeIndexPage() {
     startGameBtn.addEventListener("click", function () {
       const selectedFile = document.getElementById("verb-file-select").value;
       if (selectedFile) {
-        // Navigate to the game with the selected file as a parameter
-        window.location.href = `game.html?file=${selectedFile}`;
+        // Store the selected file in sessionStorage instead of URL parameter
+        sessionStorage.setItem("selectedVerbFile", selectedFile);
+        // Navigate to the game without any parameters
+        window.location.href = "game.html";
       } else {
         alert("Please select a verb file first.");
       }
@@ -204,14 +206,13 @@ function initializeGame() {
 }
 
 function loadVerbs() {
-  // Get the selected file from URL parameters
-  const urlParams = new URLSearchParams(window.location.search);
-  const selectedFile = urlParams.get("file");
+  // Get the selected file from sessionStorage
+  const selectedFile = sessionStorage.getItem("selectedVerbFile");
 
   if (!selectedFile) {
-    console.error("No file selected. Please provide a verb file.");
+    console.error("No verb file selected in the session storage.");
     document.getElementById("loading").textContent =
-      "No file selected. Please provide a verb file.";
+      "No verb file selected. Please go back to the main page and select a verb file.";
     return;
   }
 
