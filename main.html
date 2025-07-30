@@ -26,66 +26,93 @@
     </div>
 
     <script>
-      // Load CSV files using GitHub API
+      // Load CSV files from GitHub API or local
       async function loadVerbFiles() {
         try {
-          // Get the current repository information from the URL
           const currentUrl = window.location.href;
           const isGitHubPages = currentUrl.includes("github.io");
 
-          if (!isGitHubPages) {
-            throw new Error(
-              "This feature only works on GitHub Pages. Current URL: " +
-                currentUrl,
-            );
-          }
+          let files = [];
 
-          // Extract repo owner and name from GitHub Pages URL
-          // Format: https://username.github.io/repository-name/
-          const urlParts = new URL(currentUrl);
-          const pathParts = urlParts.pathname
-            .split("/")
-            .filter((part) => part.length > 0);
+          if (isGitHubPages) {
+            // GitHub Pages: Use GitHub API
+            const urlParts = new URL(currentUrl);
+            const pathParts = urlParts.pathname
+              .split("/")
+              .filter((part) => part.length > 0);
 
-          let repoOwner, repoName;
+            let repoOwner, repoName;
 
-          if (urlParts.hostname.includes("github.io")) {
-            // Standard GitHub Pages: username.github.io/repo-name
-            repoOwner = urlParts.hostname.split(".")[0];
-            repoName = pathParts[0];
+            if (urlParts.hostname.includes("github.io")) {
+              // Standard GitHub Pages: username.github.io/repo-name
+              repoOwner = urlParts.hostname.split(".")[0];
+              repoName = pathParts[0];
+            } else {
+              throw new Error(
+                "Unable to parse GitHub Pages URL format: " + currentUrl,
+              );
+            }
+
+            if (!repoOwner || !repoName) {
+              throw new Error(
+                "Could not extract repository information from URL: " +
+                  currentUrl,
+              );
+            }
+
+            console.log(`Detected repository: ${repoOwner}/${repoName}`);
+
+            // Use GitHub API to get files from the Verbs directory
+            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/Verbs`;
+            console.log("Fetching from API:", apiUrl);
+
+            const response = await fetch(apiUrl);
+
+            if (!response.ok) {
+              throw new Error(
+                `GitHub API request failed: ${response.status} ${response.statusText}`,
+              );
+            }
+
+            const data = await response.json();
+
+            // Filter for CSV files
+            files = data
+              .filter((file) => file.name.endsWith(".csv"))
+              .map((file) => file.name);
           } else {
-            throw new Error(
-              "Unable to parse GitHub Pages URL format: " + currentUrl,
-            );
+            // Local/Normal server: Try to discover CSV files dynamically
+            console.log("Running on local server, attempting to discover CSV files");
+            
+            try {
+              // Try to fetch the directory listing if the server supports it
+              const dirResponse = await fetch('Verbs/');
+              
+              if (dirResponse.ok) {
+                const dirText = await dirResponse.text();
+                
+                // Parse HTML directory listing for .csv files
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(dirText, 'text/html');
+                const links = doc.querySelectorAll('a[href]');
+                
+                for (const link of links) {
+                  const href = link.getAttribute('href');
+                  if (href && href.endsWith('.csv')) {
+                    files.push(href);
+                  }
+                }
+                
+                console.log("Discovered files from directory listing:", files);
+              } else {
+                throw new Error("Directory listing not available");
+              }
+            } catch (dirError) {
+              console.log("Directory listing failed:", dirError.message);
+              
+            throw new Error("No CSV files could be discovered in the Verbs directory. Please ensure CSV files exist and are accessible.");
+            }
           }
-
-          if (!repoOwner || !repoName) {
-            throw new Error(
-              "Could not extract repository information from URL: " +
-                currentUrl,
-            );
-          }
-
-          console.log(`Detected repository: ${repoOwner}/${repoName}`);
-
-          // Use GitHub API to get files from the Verbs directory
-          const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/Verbs`;
-          console.log("Fetching from API:", apiUrl);
-
-          const response = await fetch(apiUrl);
-
-          if (!response.ok) {
-            throw new Error(
-              `GitHub API request failed: ${response.status} ${response.statusText}`,
-            );
-          }
-
-          const data = await response.json();
-
-          // Filter for CSV files
-          const files = data
-            .filter((file) => file.name.endsWith(".csv"))
-            .map((file) => file.name);
 
           console.log("Found CSV files:", files);
 
