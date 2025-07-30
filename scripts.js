@@ -310,7 +310,9 @@ function displayVerb() {
       cell.className += " hidden-cell";
       cell.textContent = "???";
     } else {
-      cell.textContent = values[i];
+      // Capitalize the first letter of the verb value
+      const capitalizedValue = values[i] ? values[i].charAt(0).toUpperCase() + values[i].slice(1) : "";
+      cell.textContent = capitalizedValue;
     }
 
     // Add header and cell to column
@@ -369,7 +371,9 @@ function showFeedback(isCorrect, correctAnswer) {
     feedback.textContent = "Correct! Well done!";
   } else {
     feedback.className = "feedback incorrect";
-    feedback.textContent = `Incorrect. The correct answer is: "${correctAnswer}"`;
+    // Capitalize the first letter of the correct answer
+    const capitalizedAnswer = correctAnswer.charAt(0).toUpperCase() + correctAnswer.slice(1);
+    feedback.textContent = `Incorrect. The correct answer is: "${capitalizedAnswer}"`;
   }
 
   // Show the complete verb by updating the existing grid
@@ -394,7 +398,9 @@ function showFeedback(isCorrect, correctAnswer) {
       const cell = existingColumns[i].querySelector(".verb-cell");
       if (cell) {
         cell.className = "verb-cell"; // Remove hidden-cell class if it exists
-        cell.textContent = values[i];
+        // Capitalize the first letter of the verb value
+        const capitalizedValue = values[i] ? values[i].charAt(0).toUpperCase() + values[i].slice(1) : "";
+        cell.textContent = capitalizedValue;
       }
     }
   }
