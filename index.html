@@ -11,47 +11,151 @@
     <div class="container">
       <h1>English Irregular Verbs Game</h1>
 
-      <div class="stats">
-        <div class="stat-item">
-          <div class="stat-value" id="total-questions">0</div>
-          <div>Total Questions</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value" id="correct-answers">0</div>
-          <div>Correct Answers</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value" id="percentage">0%</div>
-          <div>Success Rate</div>
-        </div>
-      </div>
-
-      <div id="loading" class="loading">Loading verbs...</div>
-
-      <div id="game-area" class="game-area" style="display: none">
+      <div class="game-area">
         <div class="verb-display">
-          <div class="verb-grid" id="verb-grid">
-            <!-- Verb columns will be inserted here -->
-          </div>
-        </div>
-
-        <div>
-          <input
-            type="text"
-            id="answer-input"
-            class="answer-input"
-            placeholder="Type your answer here..."
-          />
+          <label for="verb-file-select">Choose a verb list:</label>
+          <select id="verb-file-select" class="answer-input">
+            <option value="">Loading files...</option>
+          </select>
         </div>
 
         <div class="buttons">
-          <button id="action-btn" class="action-btn">Check Answer</button>
+          <button id="start-game-btn" class="action-btn">Start Game</button>
         </div>
-
-        <div id="feedback" class="feedback" style="display: none"></div>
       </div>
     </div>
 
-    <script type="module" src="scripts.js"></script>
+    <script>
+      // Load CSV files from GitHub API or local
+      async function loadVerbFiles() {
+        try {
+          const currentUrl = window.location.href;
+          const isGitHubPages = currentUrl.includes("github.io");
+
+          let files = [];
+
+          if (isGitHubPages) {
+            // GitHub Pages: Use GitHub API
+            const urlParts = new URL(currentUrl);
+            const pathParts = urlParts.pathname
+              .split("/")
+              .filter((part) => part.length > 0);
+
+            let repoOwner, repoName;
+
+            if (urlParts.hostname.includes("github.io")) {
+              // Standard GitHub Pages: username.github.io/repo-name
+              repoOwner = urlParts.hostname.split(".")[0];
+              repoName = pathParts[0];
+            } else {
+              throw new Error(
+                "Unable to parse GitHub Pages URL format: " + currentUrl,
+              );
+            }
+
+            if (!repoOwner || !repoName) {
+              throw new Error(
+                "Could not extract repository information from URL: " +
+                  currentUrl,
+              );
+            }
+
+            console.log(`Detected repository: ${repoOwner}/${repoName}`);
+
+            // Use GitHub API to get files from the Verbs directory
+            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/Verbs`;
+            console.log("Fetching from API:", apiUrl);
+
+            const response = await fetch(apiUrl);
+
+            if (!response.ok) {
+              throw new Error(
+                `GitHub API request failed: ${response.status} ${response.statusText}`,
+              );
+            }
+
+            const data = await response.json();
+
+            // Filter for CSV files
+            files = data
+              .filter((file) => file.name.endsWith(".csv"))
+              .map((file) => file.name);
+          } else {
+            // Local/Normal server: Try to discover CSV files dynamically
+            console.log(
+              "Running on local server, attempting to discover CSV files",
+            );
+
+            try {
+              // Try to fetch the directory listing if the server supports it
+              const dirResponse = await fetch("Verbs/");
+
+              if (dirResponse.ok) {
+                const dirText = await dirResponse.text();
+
+                // Parse HTML directory listing for .csv files
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(dirText, "text/html");
+                const links = doc.querySelectorAll("a[href]");
+
+                for (const link of links) {
+                  const href = link.getAttribute("href");
+                  if (href && href.endsWith(".csv")) {
+                    files.push(href);
+                  }
+                }
+
+                console.log("Discovered files from directory listing:", files);
+              } else {
+                throw new Error("Directory listing not available");
+              }
+            } catch (dirError) {
+              console.log("Directory listing failed:", dirError.message);
+
+              throw new Error(
+                "No CSV files could be discovered in the Verbs directory. Please ensure CSV files exist and are accessible.",
+              );
+            }
+          }
+
+          console.log("Found CSV files:", files);
+
+          // Populate dropdown
+          const select = document.getElementById("verb-file-select");
+          select.innerHTML = '<option value="">Select a file...</option>';
+
+          files.forEach((file) => {
+            const option = document.createElement("option");
+            option.value = file;
+            option.textContent = file
+              .replace(".csv", "")
+              .replace(/([A-Z])/g, " $1")
+              .trim();
+            select.appendChild(option);
+          });
+        } catch (error) {
+          console.error("Error loading files:", error);
+          const select = document.getElementById("verb-file-select");
+          select.innerHTML = `<option value="">Error: ${error.message}</option>`;
+          throw error; // Re-throw to ensure the error is visible
+        }
+      }
+
+      // Load files when page loads
+      document.addEventListener("DOMContentLoaded", loadVerbFiles);
+
+      document
+        .getElementById("start-game-btn")
+        .addEventListener("click", function () {
+          const selectedFile =
+            document.getElementById("verb-file-select").value;
+          if (selectedFile) {
+            // Navigate to the game with the selected file as a parameter
+            window.location.href = `index.html?file=${selectedFile}`;
+          } else {
+            alert("Please select a verb file first.");
+          }
+        });
+    </script>
   </body>
 </html>
