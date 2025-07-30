@@ -204,7 +204,18 @@ function initializeGame() {
 }
 
 function loadVerbs() {
-  fetch("Verbs/ListaVerbos.csv")
+  // Get the selected file from URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const selectedFile = urlParams.get('file');
+
+  if (!selectedFile) {
+    console.error("No file selected. Please provide a verb file.");
+    document.getElementById("loading").textContent =
+      "No file selected. Please provide a verb file.";
+      return;
+  }
+  
+  fetch(`Verbs/${selectedFile}`)
     .then((response) => response.text())
     .then((csvText) => {
       const csvBlob = new Blob([csvText], { type: "text/csv" });
