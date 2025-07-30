@@ -1,5 +1,12 @@
 // scripts.js
 
+// Function to handle back button navigation
+function goBackToIndex() {
+  // The selectedVerbFile is already stored in sessionStorage, 
+  // so we just need to navigate back to index.html
+  window.location.href = 'index.html';
+}
+
 // Index page functions
 async function loadVerbFiles() {
   try {
@@ -104,6 +111,12 @@ async function loadVerbFiles() {
         .trim();
       select.appendChild(option);
     });
+
+    // Restore previously selected file from sessionStorage
+    const previouslySelected = sessionStorage.getItem("selectedVerbFile");
+    if (previouslySelected && files.includes(previouslySelected)) {
+      select.value = previouslySelected;
+    }
   } catch (error) {
     console.error("Error loading files:", error);
     const select = document.getElementById("verb-file-select");
@@ -194,6 +207,12 @@ function initializeGame() {
 
   // Set up event listeners
   actionBtn.addEventListener("click", handleActionButton);
+
+  // Set up back button event listener
+  const backBtn = document.getElementById("back-btn");
+  if (backBtn) {
+    backBtn.addEventListener("click", goBackToIndex);
+  }
 
   // Add document-level Enter key listener so it works even when input is not focused
   document.addEventListener("keypress", function (e) {
