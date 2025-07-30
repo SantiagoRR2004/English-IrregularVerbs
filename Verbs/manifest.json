@@ -1,6 +1,3 @@
 {
-  "files": [
-    "ListaVerbos.csv",
-    "ListaVerbosExtendida.csv"
-  ]
+  "files": ["ListaVerbos.csv", "ListaVerbosExtendida.csv"]
 }

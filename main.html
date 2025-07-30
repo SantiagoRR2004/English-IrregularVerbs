@@ -31,18 +31,20 @@
         try {
           const response = await fetch("/Verbs/manifest.json");
           const manifest = await response.json();
-          
+
           // Populate dropdown
           const select = document.getElementById("verb-file-select");
           select.innerHTML = '<option value="">Select a file...</option>';
-          
-          manifest.files.forEach(file => {
+
+          manifest.files.forEach((file) => {
             const option = document.createElement("option");
             option.value = file;
-            option.textContent = file.replace(".csv", "").replace(/([A-Z])/g, " $1").trim();
+            option.textContent = file
+              .replace(".csv", "")
+              .replace(/([A-Z])/g, " $1")
+              .trim();
             select.appendChild(option);
           });
-          
         } catch (error) {
           console.error("Error loading files:", error);
           // Fallback to show an error message
@@ -54,16 +56,18 @@
       // Load files when page loads
       document.addEventListener("DOMContentLoaded", loadVerbFiles);
 
-      document.getElementById("start-game-btn").addEventListener("click", function() {
-        const selectedFile =
-          document.getElementById("verb-file-select").value;
-        if (selectedFile) {
-          // Navigate to the game with the selected file as a parameter
-          window.location.href = `index.html?file=${selectedFile}`;
-        } else {
-          alert("Please select a verb file first.");
-        }
-      });
+      document
+        .getElementById("start-game-btn")
+        .addEventListener("click", function () {
+          const selectedFile =
+            document.getElementById("verb-file-select").value;
+          if (selectedFile) {
+            // Navigate to the game with the selected file as a parameter
+            window.location.href = `index.html?file=${selectedFile}`;
+          } else {
+            alert("Please select a verb file first.");
+          }
+        });
     </script>
   </body>
 </html>
