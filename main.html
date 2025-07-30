@@ -29,7 +29,7 @@
       // Load CSV files from manifest
       async function loadVerbFiles() {
         try {
-          const response = await fetch("/Verbs/manifest.json");
+          const response = await fetch("Verbs/manifest.json");
           const manifest = await response.json();
 
           // Populate dropdown
