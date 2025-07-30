@@ -311,7 +311,9 @@ function displayVerb() {
       cell.textContent = "???";
     } else {
       // Capitalize the first letter of the verb value
-      const capitalizedValue = values[i] ? values[i].charAt(0).toUpperCase() + values[i].slice(1) : "";
+      const capitalizedValue = values[i]
+        ? values[i].charAt(0).toUpperCase() + values[i].slice(1)
+        : "";
       cell.textContent = capitalizedValue;
     }
 
@@ -372,7 +374,8 @@ function showFeedback(isCorrect, correctAnswer) {
   } else {
     feedback.className = "feedback incorrect";
     // Capitalize the first letter of the correct answer
-    const capitalizedAnswer = correctAnswer.charAt(0).toUpperCase() + correctAnswer.slice(1);
+    const capitalizedAnswer =
+      correctAnswer.charAt(0).toUpperCase() + correctAnswer.slice(1);
     feedback.textContent = `Incorrect. The correct answer is: "${capitalizedAnswer}"`;
   }
 
@@ -399,7 +402,9 @@ function showFeedback(isCorrect, correctAnswer) {
       if (cell) {
         cell.className = "verb-cell"; // Remove hidden-cell class if it exists
         // Capitalize the first letter of the verb value
-        const capitalizedValue = values[i] ? values[i].charAt(0).toUpperCase() + values[i].slice(1) : "";
+        const capitalizedValue = values[i]
+          ? values[i].charAt(0).toUpperCase() + values[i].slice(1)
+          : "";
         cell.textContent = capitalizedValue;
       }
     }
