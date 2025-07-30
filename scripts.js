@@ -29,8 +29,7 @@ async function loadVerbFiles() {
 
       if (!repoOwner || !repoName) {
         throw new Error(
-          "Could not extract repository information from URL: " +
-            currentUrl,
+          "Could not extract repository information from URL: " + currentUrl,
         );
       }
 
@@ -56,9 +55,7 @@ async function loadVerbFiles() {
         .map((file) => file.name);
     } else {
       // Local/Normal server: Try to discover CSV files dynamically
-      console.log(
-        "Running on local server, attempting to discover CSV files",
-      );
+      console.log("Running on local server, attempting to discover CSV files");
 
       try {
         // Try to fetch the directory listing if the server supports it
