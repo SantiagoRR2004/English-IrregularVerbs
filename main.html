@@ -82,35 +82,39 @@
               .map((file) => file.name);
           } else {
             // Local/Normal server: Try to discover CSV files dynamically
-            console.log("Running on local server, attempting to discover CSV files");
-            
+            console.log(
+              "Running on local server, attempting to discover CSV files",
+            );
+
             try {
               // Try to fetch the directory listing if the server supports it
-              const dirResponse = await fetch('Verbs/');
-              
+              const dirResponse = await fetch("Verbs/");
+
               if (dirResponse.ok) {
                 const dirText = await dirResponse.text();
-                
+
                 // Parse HTML directory listing for .csv files
                 const parser = new DOMParser();
-                const doc = parser.parseFromString(dirText, 'text/html');
-                const links = doc.querySelectorAll('a[href]');
-                
+                const doc = parser.parseFromString(dirText, "text/html");
+                const links = doc.querySelectorAll("a[href]");
+
                 for (const link of links) {
-                  const href = link.getAttribute('href');
-                  if (href && href.endsWith('.csv')) {
+                  const href = link.getAttribute("href");
+                  if (href && href.endsWith(".csv")) {
                     files.push(href);
                   }
                 }
-                
+
                 console.log("Discovered files from directory listing:", files);
               } else {
                 throw new Error("Directory listing not available");
               }
             } catch (dirError) {
               console.log("Directory listing failed:", dirError.message);
-              
-            throw new Error("No CSV files could be discovered in the Verbs directory. Please ensure CSV files exist and are accessible.");
+
+              throw new Error(
+                "No CSV files could be discovered in the Verbs directory. Please ensure CSV files exist and are accessible.",
+              );
             }
           }
 
