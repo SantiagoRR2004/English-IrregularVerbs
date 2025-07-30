@@ -1,5 +1,139 @@
 // scripts.js
 
+// Index page functions
+async function loadVerbFiles() {
+  try {
+    const currentUrl = window.location.href;
+    const isGitHubPages = currentUrl.includes("github.io");
+
+    let files = [];
+
+    if (isGitHubPages) {
+      // GitHub Pages: Use GitHub API
+      const urlParts = new URL(currentUrl);
+      const pathParts = urlParts.pathname
+        .split("/")
+        .filter((part) => part.length > 0);
+
+      let repoOwner, repoName;
+
+      if (urlParts.hostname.includes("github.io")) {
+        // Standard GitHub Pages: username.github.io/repo-name
+        repoOwner = urlParts.hostname.split(".")[0];
+        repoName = pathParts[0];
+      } else {
+        throw new Error(
+          "Unable to parse GitHub Pages URL format: " + currentUrl,
+        );
+      }
+
+      if (!repoOwner || !repoName) {
+        throw new Error(
+          "Could not extract repository information from URL: " +
+            currentUrl,
+        );
+      }
+
+      console.log(`Detected repository: ${repoOwner}/${repoName}`);
+
+      // Use GitHub API to get files from the Verbs directory
+      const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/Verbs`;
+      console.log("Fetching from API:", apiUrl);
+
+      const response = await fetch(apiUrl);
+
+      if (!response.ok) {
+        throw new Error(
+          `GitHub API request failed: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      const data = await response.json();
+
+      // Filter for CSV files
+      files = data
+        .filter((file) => file.name.endsWith(".csv"))
+        .map((file) => file.name);
+    } else {
+      // Local/Normal server: Try to discover CSV files dynamically
+      console.log(
+        "Running on local server, attempting to discover CSV files",
+      );
+
+      try {
+        // Try to fetch the directory listing if the server supports it
+        const dirResponse = await fetch("Verbs/");
+
+        if (dirResponse.ok) {
+          const dirText = await dirResponse.text();
+
+          // Parse HTML directory listing for .csv files
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(dirText, "text/html");
+          const links = doc.querySelectorAll("a[href]");
+
+          for (const link of links) {
+            const href = link.getAttribute("href");
+            if (href && href.endsWith(".csv")) {
+              files.push(href);
+            }
+          }
+
+          console.log("Discovered files from directory listing:", files);
+        } else {
+          throw new Error("Directory listing not available");
+        }
+      } catch (dirError) {
+        console.log("Directory listing failed:", dirError.message);
+
+        throw new Error(
+          "No CSV files could be discovered in the Verbs directory. Please ensure CSV files exist and are accessible.",
+        );
+      }
+    }
+
+    console.log("Found CSV files:", files);
+
+    // Populate dropdown
+    const select = document.getElementById("verb-file-select");
+    select.innerHTML = '<option value="">Select a file...</option>';
+
+    files.forEach((file) => {
+      const option = document.createElement("option");
+      option.value = file;
+      option.textContent = file
+        .replace(".csv", "")
+        .replace(/([A-Z])/g, " $1")
+        .trim();
+      select.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Error loading files:", error);
+    const select = document.getElementById("verb-file-select");
+    select.innerHTML = `<option value="">Error: ${error.message}</option>`;
+    throw error; // Re-throw to ensure the error is visible
+  }
+}
+
+function initializeIndexPage() {
+  // Load files when page loads
+  loadVerbFiles();
+
+  // Set up start game button event listener
+  const startGameBtn = document.getElementById("start-game-btn");
+  if (startGameBtn) {
+    startGameBtn.addEventListener("click", function () {
+      const selectedFile = document.getElementById("verb-file-select").value;
+      if (selectedFile) {
+        // Navigate to the game with the selected file as a parameter
+        window.location.href = `game.html?file=${selectedFile}`;
+      } else {
+        alert("Please select a verb file first.");
+      }
+    });
+  }
+}
+
 // Game state
 let verbs = [];
 let currentVerb = null;
@@ -12,12 +146,19 @@ let gameState = "waiting-for-answer"; // 'waiting-for-answer' or 'showing-feedba
 let gameArea, verbGrid, answerInput, feedback, actionBtn;
 let totalQuestionsEl, correctAnswersEl, percentageEl;
 
-// Initialize the game when the page loads
+// Initialize the appropriate page when the document loads
 document.addEventListener("DOMContentLoaded", function () {
-  initializeGame();
+  // Check if we're on the index page or game page
+  if (document.getElementById("verb-file-select")) {
+    // We're on the index page
+    initializeIndexPage();
+  } else if (document.getElementById("game-area")) {
+    // We're on the game page
+    initializeGame();
+  }
 });
 
-export function parseCSVFile(file, callback) {
+function parseCSVFile(file, callback) {
   const reader = new FileReader();
 
   reader.onload = function (event) {
