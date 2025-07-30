@@ -2,9 +2,9 @@
 
 // Function to handle back button navigation
 function goBackToIndex() {
-  // The selectedVerbFile is already stored in sessionStorage, 
+  // The selectedVerbFile is already stored in sessionStorage,
   // so we just need to navigate back to index.html
-  window.location.href = 'index.html';
+  window.location.href = "index.html";
 }
 
 // Index page functions
